@@ -35,7 +35,7 @@ class ScriptTest extends BaseTest
     public function testModule()
     {
         foreach (array_keys($this->modules) as $module) {
-            $this->assertNotNull($this->script->getManager()->getModule($module), sprintf('Module %s is exist.', $module));
+            $this->assertNotNull($this->script->getManager()->getModule($module), sprintf('Module %s is exist', $module));
         }
     }
 
@@ -43,9 +43,17 @@ class ScriptTest extends BaseTest
     {
         foreach ($this->modules as $functions) {
             foreach ($functions as $func) {
-                $this->assertTrue($this->script->getManager()->has($func), sprintf('Function %s is exist.', $func));
+                $this->assertTrue($this->script->getManager()->has($func), sprintf('Function %s is exist', $func));
             }
         }
+    }
+
+    public function testAlias()
+    {
+        $this->script->getManager()->addAlias('somefunc', 'test');
+        $this->script->getManager()->addAlias('somefunc2', 'function_not_exist');
+        $this->assertTrue($this->script->getManager()->has('somefunc'), 'Function alias successfuly added if target function exist');
+        $this->assertFalse($this->script->getManager()->has('somefunc2'), 'Function alias not added if target function doesn\'t exist');
     }
 
     protected function assertContext()

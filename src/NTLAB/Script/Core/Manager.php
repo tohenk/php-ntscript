@@ -242,13 +242,63 @@ class Manager
      */
     public function add(Func $func)
     {
-        if (!isset($this->functions[$func->getName()])) {
-            $this->functions[$func->getName()] = $func;
-            if ($func->isLogic()) {
-                $this->logics[] = $func->getName();
+        foreach (array($func->getName(), $func->getAlias()) as $name) {
+            if (null === $name) {
+                continue;
             }
-            if ($func->getAlias()) {
-                $this->functions[$func->getAlias()] = $func;
+            $this->registerFunc($name, $func);
+            if ($func->isLogic()) {
+                $this->registerLogic($name);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Register script function.
+     *
+     * @param string $name  The function name
+     * @param \NTLAB\Script\Core\Function $func  The function object
+     * @return \NTLAB\Script\Core\Manager
+     */
+    protected function registerFunc($name, $func)
+    {
+        if (!isset($this->functions[$name])) {
+            $this->functions[$name] = $func;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Register script logic.
+     *
+     * @param string $name  The function name
+     * @return \NTLAB\Script\Core\Manager
+     */
+    protected function registerLogic($name)
+    {
+        if (!in_array($name, $this->logics)) {
+            $this->logics[] = $name;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add function alias.
+     *
+     * @param string $alias  Function name alias
+     * @param string $func  The original function name to alias
+     * @return \NTLAB\Script\Core\Manager
+     */
+    public function addAlias($alias, $func)
+    {
+        if (!$this->has($alias) && ($func = $this->getFunc($func))) {
+            $this->registerFunc($alias, $func);
+            if ($func->isLogic()) {
+                $this->registerLogic($alias);
             }
         }
 

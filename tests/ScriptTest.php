@@ -3,8 +3,10 @@
 namespace NTLAB\Script\Test;
 
 use NTLAB\Script\Context\ArrayVar;
+use NTLAB\Script\Core\Manager;
 use NTLAB\Script\Core\Module;
 use NTLAB\Script\Core\Script;
+use NTLAB\Script\Listener\ListenerInterface;
 
 class ScriptTest extends BaseTest
 {
@@ -28,7 +30,6 @@ class ScriptTest extends BaseTest
     protected function setUp()
     {
         $this->script = new Script();
-        $this->script->getManager()->addModule(new TestModule());
     }
 
     public function testModule()
@@ -199,3 +200,25 @@ class TestModule extends Module
         return 'TEST';
     }
 }
+
+class TestListener implements ListenerInterface
+{
+    protected static $instance = null;
+
+    public static function getInstance()
+    {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
+    public function notifyModuleRegister($manager)
+    {
+        $manager->addModule(new TestModule());
+    }
+}
+
+// register test module
+Manager::addListener(TestListener::getInstance());

@@ -29,6 +29,7 @@ namespace NTLAB\Script\Core;
 use NTLAB\Script\Context\ContextInterface;
 use NTLAB\Script\Context\ArrayContext;
 use NTLAB\Script\Context\ObjectContext;
+use NTLAB\Script\Listener\ListenerInterface;
 use NTLAB\Script\Parser\Parser;
 use NTLAB\Script\Parser\LexerParser;
 use NTLAB\Script\Provider\ProviderInterface;
@@ -54,6 +55,11 @@ class Manager
      * @var \NTLAB\Script\Provider\ProviderInterface[]
      */
     protected static $providers = array();
+
+    /**
+     * @var \NTLAB\Script\Listener\ListenerInterface[]
+     */
+    protected static $listeners = array();
 
     /**
      * @var \NTLAB\Script\Context\ContextInterface[]
@@ -89,7 +95,10 @@ class Manager
     {
         if (null == self::$instance) {
             self::$instance = new self();
-            self::$instance->registerProviders();
+            self::$instance
+                ->registerProviders()
+                ->notifyListeners()
+            ;
         }
 
         return self::$instance;
@@ -98,7 +107,7 @@ class Manager
     /**
      * Add script module provider.
      *
-     * @param NTLAB\Script\Provider\ProviderInterface $provider  Module provider
+     * @param \NTLAB\Script\Provider\ProviderInterface $provider  Module provider
      */
     public static function addProvider(ProviderInterface $provider)
     {
@@ -108,9 +117,21 @@ class Manager
     }
 
     /**
+     * Add module registration listener.
+     *
+     * @param \NTLAB\Script\Listener\ListenerInterface $listener  The listener
+     */
+    public static function addListener(ListenerInterface $listener)
+    {
+        if (!in_array($listener, self::$listeners)) {
+            self::$listeners[] = $listener;
+        }
+    }
+
+    /**
      * Add script context handler.
      *
-     * @param NTLAB\Script\Context\ContextInterface $context  Context handler
+     * @param \NTLAB\Script\Context\ContextInterface $context  Context handler
      */
     public static function addContext(ContextInterface $context)
     {
@@ -153,6 +174,20 @@ class Manager
             foreach ($modules as $module) {
                 $this->addModule($module);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Notify all listener for module registration.
+     *
+     * @return \NTLAB\Script\Core\Manager
+     */
+    protected function notifyListeners()
+    {
+        foreach (self::$listeners as $listener) {
+            $listener->notifyModuleRegister($this);
         }
 
         return $this;

@@ -39,12 +39,16 @@ use NTLAB\Script\Provider\SystemProvider;
 Manager::addProvider(SystemProvider::getInstance());
 
 // register core context handler
-Manager::addContext(ObjectContext::getInstance());
-Manager::addContext(ArrayContext::getInstance());
+Manager::addContext(ObjectContext::getInstance(), Manager::CONTEXT_PRIO_LOW);
+Manager::addContext(ArrayContext::getInstance(), Manager::CONTEXT_PRIO_LOW);
 
 class Manager
 {
     const VERSION = '1.0.0';
+
+    const CONTEXT_PRIO_HIGH = 'HIGH';
+    const CONTEXT_PRIO_NORMAL = 'NORMAL';
+    const CONTEXT_PRIO_LOW = 'LOW';
 
     /**
      * @var \NTLAB\Script\Core\Manager
@@ -64,7 +68,11 @@ class Manager
     /**
      * @var \NTLAB\Script\Context\ContextInterface[]
      */
-    protected static $contexes = array();
+    protected static $contexes = array(
+        self::CONTEXT_PRIO_HIGH => array(),
+        self::CONTEXT_PRIO_NORMAL => array(),
+        self::CONTEXT_PRIO_LOW => array(),
+    );
 
     /**
      * @var \NTLAB\Script\Parser\Parser
@@ -133,10 +141,10 @@ class Manager
      *
      * @param \NTLAB\Script\Context\ContextInterface $context  Context handler
      */
-    public static function addContext(ContextInterface $context)
+    public static function addContext(ContextInterface $context, $priority = self::CONTEXT_PRIO_NORMAL)
     {
-        if (!in_array($context, self::$contexes)) {
-            self::$contexes[] = $context;
+        if (!in_array($context, self::$contexes[$priority])) {
+            self::$contexes[$priority][] = $context;
         }
     }
 
@@ -153,11 +161,15 @@ class Manager
     /**
      * Get context handlers.
      *
-     * @return \NTLAB\Script\Context\ContextInterface
+     * @return \NTLAB\Script\Context\ContextInterface[]
      */
     public static function getContexes()
     {
-        return self::$contexes;
+        return array_merge(
+            static::$contexes[static::CONTEXT_PRIO_HIGH],
+            static::$contexes[static::CONTEXT_PRIO_NORMAL],
+            static::$contexes[static::CONTEXT_PRIO_LOW]
+        );
     }
 
     /**

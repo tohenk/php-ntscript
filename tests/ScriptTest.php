@@ -16,7 +16,8 @@ class ScriptTest extends BaseTest
     protected $script;
 
     protected $modules = array(
-        'system.array'    => array('each', 'eachvar', 'lcreate', 'ladd', 'lconcat'),
+        'system.array'    => array('each', 'lcreate', 'ladd', 'lconcat'),
+        'system.context'  => array('recno', 'reccnt'),
         'system.core'     => array('func', 'var', 'null', 'eval', 'const'),
         'system.counter'  => array('cget', 'cset', 'creset', 'cinc', 'cdec', 'series'),
         'system.date'     => array('fmtdate', 'dtafter', 'dtbefore', 'dtpart', 'time'),
@@ -93,7 +94,24 @@ class ScriptTest extends BaseTest
         $this->assertEquals('YES', $this->script->evaluate('#if(#gr(2,1),"YES")'), '->evaluate() proper parse if when condition is function');
         $this->assertEquals('9 test: something', $this->script->evaluate('#if(1,"#len($var) test: $var")'), '->evaluate() proper parse if with special chars');
 
-        $this->assertEquals('X1, X2, X3', $this->script->evaluate('#lcreate(x);#each($var5,"#func(ladd,x,#func(eachvar,var))");#lconcat(x,", ")'), '->evaluate() proper process each and list');
+        $this->assertEquals('X1, X2, X3', $this->script->evaluate('#lcreate(x);#each($var5,"#func(ladd,x,#var(var))");#lconcat(x,", ")'), '->evaluate() proper process each and list');
+    }
+
+    public function testIterator()
+    {
+        $counter = 0;
+        $this->script
+            ->setObjects(array(
+                new TestContext2('A1'),
+                new TestContext2('A2'),
+                new TestContext2('A3'),
+            ))
+            ->each(function(Script $script, ScriptTest $_this) use (&$counter) {
+                $counter++;
+                $_this->assertEquals($counter, $script->evaluate('#recno()'), sprintf('Record number #%d', $counter));
+            })
+        ;
+        $this->assertEquals(3, $this->script->evaluate('#reccnt()'), 'Record count should be 3');
     }
 }
 

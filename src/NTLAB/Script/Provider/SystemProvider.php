@@ -35,6 +35,7 @@ use NTLAB\Script\Module\SysString;
 use NTLAB\Script\Module\SysDate;
 use NTLAB\Script\Module\SysArray;
 use NTLAB\Script\Module\SysCounter;
+use NTLAB\Script\Module\SysContext;
 
 class SystemProvider implements ProviderInterface
 {
@@ -76,6 +77,7 @@ class SystemProvider implements ProviderInterface
             new SysDate(),
             new SysArray(),
             new SysCounter(),
+            new SysContext(),
         );
     }
 

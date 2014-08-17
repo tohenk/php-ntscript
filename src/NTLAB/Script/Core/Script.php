@@ -26,6 +26,8 @@
 
 namespace NTLAB\Script\Core;
 
+use NTLAB\Script\Context\ContextIterator;
+
 class Script
 {
     const FUNCTION_IDENTIFIER = '#';
@@ -49,6 +51,11 @@ class Script
     protected $contexes = array();
 
     /**
+     * @var \NTLAB\Script\Context\ContextIterator
+     */
+    protected $iterator = null;
+
+    /**
      * @var object
      */
     protected $context = null;
@@ -59,6 +66,7 @@ class Script
     public function __construct()
     {
         $this->manager = Manager::getInstance();
+        $this->iterator = new ContextIterator();
     }
 
     /**
@@ -79,6 +87,55 @@ class Script
     public function getParser()
     {
         return $this->getManager()->getParser();
+    }
+
+    /**
+     * Get context iterator.
+     *
+     * @return \NTLAB\Script\Context\ContextIterator
+     */
+    public function getIterator()
+    {
+        return $this->iterator;
+    }
+
+    /**
+     * Set iterator objects.
+     *
+     * @param mixed $objects  Objects context
+     * @return \NTLAB\Script\Core\Script
+     */
+    public function setObjects($objects)
+    {
+        $this->iterator->setObjects($objects);
+
+        return $this;
+    }
+
+    /**
+     * Process each context.
+     *
+     * @param mixed $callback  The callback
+     * @return \NTLAB\Script\Core\Script
+     */
+    public function each($callback)
+    {
+        if (is_callable($callback)) {
+            $debugs = debug_backtrace(version_compare(PHP_VERSION, '5.3.6', '>=') ? DEBUG_BACKTRACE_PROVIDE_OBJECT : true);
+            // this is current function debug backtrace
+            $current = array_shift($debugs);
+            // this is the current function caller debug backtrace
+            $caller = array_shift($debugs);
+            $i = 0;
+            foreach ($this->iterator as $context) {
+                $i++;
+                $this->iterator->setRecNo($i);
+                $this->setContext($context);
+                call_user_func($callback, $this, isset($caller['object']) ? $caller['object'] : $this);
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -147,7 +204,7 @@ class Script
     public function evalFunc($func, $parameters, &$result)
     {
         if ($this->manager->has($func)) {
-            $result = $this->manager->call($func, $parameters);
+            $result = $this->manager->call($this, $func, $parameters);
 
             return true;
         }

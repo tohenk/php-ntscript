@@ -38,65 +38,33 @@ use NTLAB\Script\Core\Script;
 class SysArray extends Module
 {
     /**
-     * @var \NTLAB\Script\Core\Script
-     */
-    protected static $script = null;
-
-    protected static $eachObject = null;
-
-    /**
      * @var array
      */
     protected static $list = array();
 
     /**
-     * Get script object.
-     *
-     * @return \NTLAB\Script\Core\Script
-     */
-    protected function getScript()
-    {
-        if (null == self::$script) {
-            self::$script = new Script();
-        }
-
-        return self::$script;
-    }
-
-    /**
      * Process objects member and evaluate the script.
      *
      * @param array $objects  The objects
-     * @param string $script  The script expression to evaluate
+     * @param string $expr  The script expression to evaluate
      * @param boolean $decode  Wheter script is decoded or not (using base64)
      * @func each
      */
-    public function f_ForEach($objects, $script, $decode = false)
+    public function f_Each($objects, $expr, $decode = false)
     {
         if (is_array($objects) || is_a($objects, 'ArrayObject')) {
             if ($decode) {
-                $script = base64_decode($script);
+                $expr = base64_decode($expr);
             }
-            foreach ($objects as $object) {
-                self::$eachObject = $object;
-                $this->getScript()->evaluate($script);
-            }
+            $script = new Script();
+            $script
+                ->setObjects($objects)
+                ->each(function(Script $script, SysArray $_this) use ($expr) {
+                    $script->evaluate($expr);
+                })
+            ;
+            unset($script);
         }
-    }
-
-    /**
-     * Get the value from object currently processed by `#each()`.
-     *
-     * @param string $var  The column name
-     * @return mixed
-     * @func eachvar
-     */
-    public function f_ForEachVar($var)
-    {
-        $value = null;
-        $this->getScript()->getVar($value, $var, self::$eachObject);
-
-        return $value;
     }
 
     /**

@@ -355,16 +355,18 @@ class Manager
     /**
      * Call function.
      *
+     * @param \NTLAB\Script\Core\Script $caller  Caller script
      * @param string $name  The function name
      * @param array $parameters  The parameters
      * @return string
      */
-    public function call($name, $parameters = array())
+    public function call(Script $caller, $name, $parameters = array())
     {
         if ($this->has($name) && ($func = $this->getFunc($name))) {
             if (count($parameters) >= $func->getParameterCount()) {
                 $method = $func->getMethod();
                 if (is_callable($method)) {
+                    $func->getModule()->setScript($caller);
                     return call_user_func_array($method, $parameters);
                 }
             }

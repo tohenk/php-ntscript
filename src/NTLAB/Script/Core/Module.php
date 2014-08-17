@@ -46,6 +46,11 @@ class Module
     protected $manager = null;
 
     /**
+     * @var \NTLAB\Script\Core\Script
+     */
+    protected $script = null;
+
+    /**
      * @var \ReflectionClass
      */
     protected $reflection = null;
@@ -108,6 +113,16 @@ class Module
     }
 
     /**
+     * Get script manager.
+     *
+     * @return \NTLAB\Script\Core\Manager
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+    /**
      * Set script manager.
      *
      * @param \NTLAB\Script\Core\Manager $manager  Script manager
@@ -121,13 +136,26 @@ class Module
     }
 
     /**
-     * Get script manager.
+     * Get currently executing script.
      *
-     * @return \NTLAB\Script\Core\Manager
+     * @return \NTLAB\Script\Core\Script
      */
-    public function getManager()
+    public function getScript()
     {
-        return $this->manager;
+        return $this->script;
+    }
+
+    /**
+     * Set currently executing script.
+     *
+     * @param \NTLAB\Script\Core\Script $script  Active script
+     * @return \NTLAB\Script\Core\Module
+     */
+    public function setScript(Script $script)
+    {
+        $this->script = $script;
+
+        return $this;
     }
 
     /**

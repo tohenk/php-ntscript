@@ -26,7 +26,7 @@
 
 namespace NTLAB\Script\Context;
 
-class ArrayVar
+class ArrayVar implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     protected $vars = array();
 
@@ -52,6 +52,40 @@ class ArrayVar
         $this->vars[$name] = $value;
 
         return $this;
+    }
+
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->vars);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->vars[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        if (null === $offset) {
+            $this->vars[] = $value;
+        } else {
+            $this->vars[$offset] = $value;
+        }
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->vars[$offset]);
+    }
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->vars);
+    }
+
+    public function count()
+    {
+        return count($this->vars);
     }
 
     public function __call($method, $arguments)

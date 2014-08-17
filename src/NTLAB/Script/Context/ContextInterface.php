@@ -45,4 +45,12 @@ interface ContextInterface
      * @return mixed
      */
     public function getMethod($context, $name);
+
+    /**
+     * Get key and value pair of context.
+     *
+     * @param mixed $context  Script context
+     * @return array
+     */
+    public function getKeyValuePair($context);
 }

@@ -63,7 +63,7 @@ class ArrayContext implements ContextInterface
      */
     public function canHandle($context)
     {
-        return !is_object($context) && is_array($context);
+        return is_a($context, 'ArrayVar') || (!is_object($context) && is_array($context));
     }
 
     /**
@@ -87,10 +87,27 @@ class ArrayContext implements ContextInterface
     {
         if (!in_array($context, $this->contexes)) {
             $this->contexes[] = $context;
-            $this->caches[] = new ArrayVar($context);
+            $this->caches[] = is_a($context, 'ArrayVar') ? $context : new ArrayVar($context);
         }
         if (false !== ($key = array_search($context, $this->contexes))) {
             return $this->caches[$key];
+        }
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \NTLAB\Script\Context\ContextInterface::getKeyValuePair()
+     */
+    public function getKeyValuePair($context)
+    {
+        if (count($keys = array_keys($context))) {
+            $key = array_shift($keys);
+            $values = array();
+            foreach ($keys as $k) {
+                $values[] = $context[$k];
+            }
+
+            return array($context[$key], implode(' - ', $values));
         }
     }
 }

@@ -66,4 +66,15 @@ class ObjectContext implements ContextInterface
             return array($context, 'get'.$name);
         }
     }
+
+    /**
+     * (non-PHPdoc)
+     * @see \NTLAB\Script\Context\ContextInterface::getKeyValuePair()
+     */
+    public function getKeyValuePair($context)
+    {
+        if (method_exists($context, 'getId')) {
+            return array($context->getId(), (string) $context);
+        }
+    }
 }

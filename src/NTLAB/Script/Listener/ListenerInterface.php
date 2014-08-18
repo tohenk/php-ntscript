@@ -26,6 +26,8 @@
 
 namespace NTLAB\Script\Listener;
 
+use NTLAB\Script\Context\ContextIterator;
+
 interface ListenerInterface
 {
     /**
@@ -34,4 +36,12 @@ interface ListenerInterface
      * @param \NTLAB\Script\Core\Manager $manager  The script manager
      */
     public function notifyModuleRegister($manager);
+
+    /**
+     * Notify listener when script context changed.
+     *
+     * @param mixed $context  Script context
+     * @param ContextIterator $iterator
+     */
+    public function notifyContextChange($context, ContextIterator $iterator);
 }

@@ -131,6 +131,7 @@ class Script
                 $i++;
                 $this->iterator->setRecNo($i);
                 $this->setContext($context);
+                $this->getManager()->notifyContextChange($context, $this->iterator);
                 call_user_func($callback, $this, isset($caller['object']) ? $caller['object'] : $this);
             }
         }

@@ -27,6 +27,7 @@
 namespace NTLAB\Script\Core;
 
 use NTLAB\Script\Context\ContextInterface;
+use NTLAB\Script\Context\ContextIterator;
 use NTLAB\Script\Context\ArrayContext;
 use NTLAB\Script\Context\ObjectContext;
 use NTLAB\Script\Listener\ListenerInterface;
@@ -105,7 +106,7 @@ class Manager
             self::$instance = new self();
             self::$instance
                 ->registerProviders()
-                ->notifyListeners()
+                ->notifyModuleRegister()
             ;
         }
 
@@ -196,10 +197,26 @@ class Manager
      *
      * @return \NTLAB\Script\Core\Manager
      */
-    protected function notifyListeners()
+    protected function notifyModuleRegister()
     {
         foreach (self::$listeners as $listener) {
             $listener->notifyModuleRegister($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Notify all listener for context change.
+     *
+     * @param mixed $context  Script context
+     * @param \NTLAB\Script\Context\ContextIterator $iterator  Context iterator
+     * @return \NTLAB\Script\Core\Manager
+     */
+    public function notifyContextChange($context, ContextIterator $iterator)
+    {
+        foreach (self::$listeners as $listener) {
+            $listener->notifyContextChange($context, $iterator);
         }
 
         return $this;

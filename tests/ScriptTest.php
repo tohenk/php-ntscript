@@ -3,6 +3,7 @@
 namespace NTLAB\Script\Test;
 
 use NTLAB\Script\Context\ArrayVar;
+use NTLAB\Script\Context\ContextIterator;
 use NTLAB\Script\Core\Manager;
 use NTLAB\Script\Core\Module;
 use NTLAB\Script\Core\Script;
@@ -243,6 +244,10 @@ class TestListener implements ListenerInterface
     public function notifyModuleRegister($manager)
     {
         $manager->addModule(new TestModule());
+    }
+
+    public function notifyContextChange($context, ContextIterator $iterator)
+    {
     }
 }
 

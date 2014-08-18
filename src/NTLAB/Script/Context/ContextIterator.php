@@ -26,7 +26,7 @@
 
 namespace NTLAB\Script\Context;
 
-class ContextIterator implements \ArrayAccess, \IteratorAggregate, \Countable
+class ContextIterator
 {
     /**
      * @var array
@@ -37,6 +37,16 @@ class ContextIterator implements \ArrayAccess, \IteratorAggregate, \Countable
      * @var int
      */
     protected $recno;
+
+    /**
+     * Get objects.
+     *
+     * @return mixed
+     */
+    public function getObjects()
+    {
+        return $this->objects;
+    }
 
     /**
      * Set objects.
@@ -67,43 +77,19 @@ class ContextIterator implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Get record number.
      *
-     * @return number
+     * @return int
      */
     public function getRecNo()
     {
         return $this->recno;
     }
 
-    public function offsetExists($offset)
-    {
-        return array_key_exists($offset, $this->objects);
-    }
-
-    public function offsetGet($offset)
-    {
-        return $this->objects[$offset];
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        if (null === $offset) {
-            $this->objects[] = $value;
-        } else {
-            $this->objects[$offset] = $value;
-        }
-    }
-
-    public function offsetUnset($offset)
-    {
-        unset($this->objects[$offset]);
-    }
-
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->objects);
-    }
-
-    public function count()
+    /**
+     * Get record count.
+     *
+     * @return int
+     */
+    public function getRecCount()
     {
         return count($this->objects);
     }

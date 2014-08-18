@@ -55,6 +55,6 @@ class SysContext extends Module
      */
     public function f_RecCount()
     {
-        return $this->getScript()->getIterator()->count();
+        return $this->getScript()->getIterator()->getRecCount();
     }
 }

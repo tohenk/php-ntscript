@@ -127,7 +127,7 @@ class Script
             // this is the current function caller debug backtrace
             $caller = array_shift($debugs);
             $i = 0;
-            foreach ($this->iterator as $context) {
+            foreach ($this->iterator->getObjects() as $context) {
                 $i++;
                 $this->iterator->setRecNo($i);
                 $this->setContext($context);

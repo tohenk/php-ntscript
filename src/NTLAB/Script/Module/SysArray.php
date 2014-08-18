@@ -61,7 +61,7 @@ class SysArray extends Module
                 ->setObjects($objects)
                 ->each(function(Script $script, SysArray $_this) use ($expr) {
                     $script->evaluate($expr);
-                })
+                }, false)
             ;
             unset($script);
         }

@@ -116,9 +116,10 @@ class Script
      * Process each context.
      *
      * @param mixed $callback  The callback
+     * @param boolean $notify  Notify listener for context change
      * @return \NTLAB\Script\Core\Script
      */
-    public function each($callback)
+    public function each($callback, $notify = true)
     {
         if (is_callable($callback)) {
             $debugs = debug_backtrace(version_compare(PHP_VERSION, '5.3.6', '>=') ? DEBUG_BACKTRACE_PROVIDE_OBJECT : true);
@@ -131,7 +132,9 @@ class Script
                 $i++;
                 $this->iterator->setRecNo($i);
                 $this->setContext($context);
-                $this->getManager()->notifyContextChange($context, $this->iterator);
+                if ($notify) {
+                    $this->getManager()->notifyContextChange($context, $this->iterator);
+                }
                 call_user_func($callback, $this, isset($caller['object']) ? $caller['object'] : $this);
             }
         }

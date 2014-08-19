@@ -63,4 +63,12 @@ interface ContextInterface
      * @return array
      */
     public function getKeyValuePair($context);
+
+    /**
+     * Persist (flush) context.
+     *
+     * @param mixed $context  Script context
+     * @return boolean
+     */
+    public function flush($context);
 }

@@ -119,4 +119,13 @@ class ArrayContext implements ContextInterface
             return array($context[$key], implode(' - ', $values));
         }
     }
+
+    /**
+     * (non-PHPdoc)
+     * @see \NTLAB\Script\Context\ContextInterface::flush()
+     */
+    public function flush($context)
+    {
+        // do nothing
+    }
 }

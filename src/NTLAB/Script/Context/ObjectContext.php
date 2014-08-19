@@ -88,4 +88,15 @@ class ObjectContext implements ContextInterface
             return array($context->getId(), (string) $context);
         }
     }
+
+    /**
+     * (non-PHPdoc)
+     * @see \NTLAB\Script\Context\ContextInterface::flush()
+     */
+    public function flush($context)
+    {
+        if (method_exists($context, 'save')) {
+            return $context->save();
+        }
+    }
 }

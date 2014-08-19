@@ -225,10 +225,8 @@ class Script
      */
     public function getVarMethod($context, $name)
     {
-        foreach ($this->getManager()->getContexes() as $handler) {
-            if ($handler->canHandle($context)) {
-                return $handler->getMethod($context, $name);
-            }
+        if ($handler = $this->getManager()->getContextHandler($context)) {
+            return $handler->getMethod($context, $name);
         }
     }
 

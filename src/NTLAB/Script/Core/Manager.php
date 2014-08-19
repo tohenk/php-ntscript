@@ -174,6 +174,21 @@ class Manager
     }
 
     /**
+     * Get context handler.
+     *
+     * @param mixed $context  The context
+     * @return \NTLAB\Script\Context\ContextInterface
+     */
+    public static function getContextHandler($context)
+    {
+        foreach (static::getContexes() as $handler) {
+            if ($handler->canHandle($context)) {
+                return $handler;
+            }
+        }
+    }
+
+    /**
      * Register all module provided by the providers.
      *
      * @return \NTLAB\Script\Core\Manager

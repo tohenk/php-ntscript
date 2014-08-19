@@ -69,6 +69,17 @@ class ObjectContext implements ContextInterface
 
     /**
      * (non-PHPdoc)
+     * @see \NTLAB\Script\Context\ContextInterface::setMethod()
+     */
+    public function setMethod($context, $name)
+    {
+        if ($this->canHandle($context)) {
+            return array($context, 'set'.$name);
+        }
+    }
+
+    /**
+     * (non-PHPdoc)
      * @see \NTLAB\Script\Context\ContextInterface::getKeyValuePair()
      */
     public function getKeyValuePair($context)

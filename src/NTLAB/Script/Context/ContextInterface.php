@@ -47,6 +47,16 @@ interface ContextInterface
     public function getMethod($context, $name);
 
     /**
+     * Get the callable method to set value of
+     * given context.
+     *
+     * @param mixed $context  Script context
+     * @param string $name  The variable name
+     * @return mixed
+     */
+    public function setMethod($context, $name);
+
+    /**
      * Get key and value pair of context.
      *
      * @param mixed $context  Script context

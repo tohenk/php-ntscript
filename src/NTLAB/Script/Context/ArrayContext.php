@@ -78,6 +78,15 @@ class ArrayContext implements ContextInterface
     }
 
     /**
+     * (non-PHPdoc)
+     * @see \NTLAB\Script\Context\ContextInterface::setMethod()
+     */
+    public function setMethod($context, $name)
+    {
+        // do nothing
+    }
+
+    /**
      * Get context cache.
      *
      * @param mixed $context  The context

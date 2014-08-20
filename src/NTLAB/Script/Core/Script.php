@@ -27,6 +27,7 @@
 namespace NTLAB\Script\Core;
 
 use NTLAB\Script\Context\ContextIterator;
+use NTLAB\Script\Context\Stack;
 
 class Script
 {
@@ -46,9 +47,9 @@ class Script
     protected $manager = null;
 
     /**
-     * @var array
+     * @var \NTLAB\Script\Context\Stack[]
      */
-    protected $contexes = array();
+    protected $stacks = array();
 
     /**
      * @var \NTLAB\Script\Context\ContextIterator
@@ -153,7 +154,7 @@ class Script
         if (null === $this->context) {
             throw new \RuntimeException('No script context available.');
         }
-        array_push($this->contexes, $this->context);
+        array_push($this->stacks, new Stack($this));
 
         return $this;
     }
@@ -166,10 +167,12 @@ class Script
      */
     public function popContext()
     {
-        if (! count($this->contexes)) {
+        if (!count($this->stacks)) {
             throw new \RuntimeException('No saved script context available.');
         }
-        $this->context = array_pop($this->contexes);
+        $stack = array_pop($this->stacks);
+        $stack->restore();
+        unset($stack);
 
         return $this;
     }
@@ -319,9 +322,9 @@ class Script
         } elseif ($this->getVar($value, $var, $this->context)) {
             $retval = true;
         }
-        if ($retval || ! $keep) {
+        if ($retval || !$keep) {
             // replace with null if variable not found
-            if (! $retval) {
+            if (!$retval) {
                 $value = null;
             }
             if ($result == static::VARIABLE_IDENTIFIER.$var) {
@@ -375,7 +378,7 @@ class Script
             $fdata = $funcs[$current];
             $fname = $fdata['match'];
             // check if script is string and function is still exist in source
-            if (! is_string($script) || 0 == strlen($script) || false === strpos($script, $fname)) {
+            if (!is_string($script) || 0 == strlen($script) || false === strpos($script, $fname)) {
                 continue;
             }
             // evaluate parameters
@@ -406,7 +409,7 @@ class Script
             }
             // evaluate functions
             $replacement = $fname;
-            if (! $this->evalFunc($fdata['name'], $params, $replacement) && ! $keep) {
+            if (!$this->evalFunc($fdata['name'], $params, $replacement) && !$keep) {
                 $replacement = '';
             }
             // replace the result

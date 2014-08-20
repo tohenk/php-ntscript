@@ -24,5 +24,8 @@
 		"psr-0" : {
 			"NTLAB\\Script\\" : "src/"
 		}
-	}
+	},
+	"bin" : [
+		"bin/ntscript-dump"
+	]
 }

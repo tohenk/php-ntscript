@@ -40,8 +40,8 @@ use NTLAB\Script\Provider\SystemProvider;
 Manager::addProvider(SystemProvider::getInstance());
 
 // register core context handler
-Manager::addContext(ObjectContext::getInstance(), Manager::CONTEXT_PRIO_LOW);
 Manager::addContext(ArrayContext::getInstance(), Manager::CONTEXT_PRIO_LOW);
+Manager::addContext(ObjectContext::getInstance(), Manager::CONTEXT_PRIO_LOW);
 
 class Manager
 {

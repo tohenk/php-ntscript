@@ -63,7 +63,7 @@ class ArrayContext implements ContextInterface
      */
     public function canHandle($context)
     {
-        return is_a($context, 'ArrayVar') || (!is_object($context) && is_array($context));
+        return is_a($context, ArrayVar::class) || (!is_object($context) && is_array($context));
     }
 
     /**
@@ -96,7 +96,7 @@ class ArrayContext implements ContextInterface
     {
         if (!in_array($context, $this->contexes)) {
             $this->contexes[] = $context;
-            $this->caches[] = is_a($context, 'ArrayVar') ? $context : new ArrayVar($context);
+            $this->caches[] = is_a($context, ArrayVar::class) ? $context : new ArrayVar($context);
         }
         if (false !== ($key = array_search($context, $this->contexes))) {
             return $this->caches[$key];
@@ -109,14 +109,15 @@ class ArrayContext implements ContextInterface
      */
     public function getKeyValuePair($context)
     {
-        if (count($keys = array_keys($context))) {
+        $vars = is_a($context, ArrayVar::class) ? $context->getVars() : $context;
+        if (count($keys = array_keys($vars))) {
             $key = array_shift($keys);
             $values = array();
             foreach ($keys as $k) {
-                $values[] = $context[$k];
+                $values[] = $vars[$k];
             }
 
-            return array($context[$key], implode(' - ', $values));
+            return array($vars[$key], implode(' - ', $values));
         }
     }
 

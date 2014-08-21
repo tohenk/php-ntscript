@@ -28,6 +28,9 @@ namespace NTLAB\Script\Context;
 
 class ArrayVar implements \ArrayAccess, \IteratorAggregate, \Countable
 {
+    /**
+     * @var array
+     */
     protected $vars = array();
 
     /**
@@ -40,6 +43,16 @@ class ArrayVar implements \ArrayAccess, \IteratorAggregate, \Countable
         foreach ($vars as $k => $v) {
             $this->add($k, $v);
         }
+    }
+
+    /**
+     * Get variables.
+     *
+     * @return array
+     */
+    public function getVars()
+    {
+        return $this->vars;
     }
 
     /**

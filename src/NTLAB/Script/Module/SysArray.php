@@ -107,4 +107,20 @@ class SysArray extends Module
             return implode($delim, self::$list[$name]);
         }
     }
+
+    /**
+     * Get the count of values in a list.
+     *
+     * @param string $name  The list name
+     * @return int
+     * @func lcount
+     */
+    public function f_LCount($name)
+    {
+        if (isset(self::$list[$name])) {
+            return count(self::$list[$name]);
+        }
+
+        return 0;
+    }
 }

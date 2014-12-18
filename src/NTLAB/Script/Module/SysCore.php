@@ -118,4 +118,15 @@ class SysCore extends Module
     {
         return defined($constant) ? constant($constant) : null;
     }
+
+    /**
+     * Get the current script context.
+     *
+     * @return mixed
+     * @func ctx
+     */
+    public function f_Context()
+    {
+        return $this->getScript()->getContext();
+    }
 }

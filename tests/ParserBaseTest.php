@@ -20,43 +20,53 @@ abstract class ParserBaseTest extends BaseTest
     protected function parseVars()
     {
         $this->parser->parse('#func("$test9 it", 0, #a(\'b c d\', $e.F));');
-        $this->assertEquals($this->parser->getVariables(), array('test9', 'e.F'), '->parse() proper parse variables from script');
+        $this->assertEquals(array('test9', 'e.F'), $this->parser->getVariables(), '->parse() proper parse variables from script');
     }
 
     protected function parseFuncs()
     {
         $this->parser->parse('#func("$test9 it", 0, #a(\'b c d\', $e.F));');
         $this->assertEquals(
-            $this->parser->getFunctions(),
             array(
                 array('name' => 'func', 'match' => '#func("$test9 it", 0, #a(\'b c d\', $e.F));', 'params' => array('$test9 it', '0', '#a(\'b c d\', $e.F)')),
                 array('name' => 'a',    'match' => '#a(\'b c d\', $e.F)',                         'params' => array('b c d', '$e.F')),
             ),
+            $this->parser->getFunctions(),
             '->parse() proper parse functions from script'
         );
 
         $this->parser->parse('#test(a,b)#test2(c,d)');
         $this->assertEquals(
-            $this->parser->getFunctions(),
             array(
                 array('name' => 'test',  'match' => '#test(a,b)',  'params' => array('a', 'b')),
                 array('name' => 'test2', 'match' => '#test2(c,d)', 'params' => array('c', 'd')),
             ),
+            $this->parser->getFunctions(),
             '->parse() proper parse combined functions from script'
         );
 
-        $this->parser->parse('#test(\'"test"\',"\'test\'")');
+        $this->parser->parse('#test(\'"$var"\',"\'test\'")');
         $this->assertEquals(
-            $this->parser->getFunctions(),
             array(
-                array('name' => 'test',  'match' => '#test(\'"test"\',"\'test\'")',  'params' => array('"test"', '\'test\'')),
+                array('name' => 'test',  'match' => '#test(\'"$var"\',"\'test\'")',  'params' => array('"$var"', '\'test\'')),
             ),
+            $this->parser->getFunctions(),
             '->parse() proper parse functions with double quoted parameter'
+        );
+
+        $this->parser->parse('#test("Testing #test(\'#func(test,me)\',\'me\')")');
+        $this->assertEquals(
+            array(
+                array('name' => 'test',  'match' => '#test("Testing #test(\'#func(test,me)\',\'me\')")', 'params' => array('Testing #test(\'#func(test,me)\',\'me\')')),
+                array('name' => 'test',  'match' => '#test(\'#func(test,me)\',\'me\')',  'params' => array('#func(test,me)', 'me')),
+                array('name' => 'func',  'match' => '#func(test,me)',  'params' => array('test', 'me')),
+            ),
+            $this->parser->getFunctions(),
+            '->parse() proper parse functions with combined quote parameter'
         );
 
         $this->parser->parse('#cdups(#spaceconcat(#beauty(#pvar(SomeObject.OtherObject.OtherVar)),#pvar(MyObject.MyVar)))');
         $this->assertEquals(
-            $this->parser->getFunctions(),
             array(
                 array(
                     'name'    => 'cdups',
@@ -84,6 +94,7 @@ abstract class ParserBaseTest extends BaseTest
                     'params'  => array('MyObject.MyVar'),
                 ),
             ),
+            $this->parser->getFunctions(),
             '->parse() proper parse complex functions from script'
         );
     }

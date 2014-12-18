@@ -200,7 +200,12 @@ class Tokenizer
                     if (null === $this->quote) {
                         $this->quote = $this->stream->getChar();
                         $this->log(sprintf("Got quote '%s'", $this->quote));
-                        $token = $this->getType();
+                        // advance start if next type is function
+                        switch ($token = $this->getType()) {
+                            case Token::TOK_FUNCTION:
+                                $this->start++;
+                                break;
+                        }
                     } else {
                         // no, just treat as text
                         $token = Token::TOK_TEXT;
@@ -275,6 +280,7 @@ class Tokenizer
                             $this->log(sprintf("Got function '%s'", $this->match));
                             if (null !== $this->quote) {
                                 $this->stream->skip($this->quote);
+                                $this->log(sprintf("Skipping quote %s", $this->quote));
                             }
                             break;
                         }

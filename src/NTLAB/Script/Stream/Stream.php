@@ -218,7 +218,7 @@ class Stream
     {
         while (true) {
             $result = $this->read();
-            if ($result && ! preg_match('/\s/x', $this->ch)) {
+            if ($result && !preg_match('/\s/x', $this->ch)) {
                 $this->pos--;
                 break;
             }

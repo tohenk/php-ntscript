@@ -349,13 +349,10 @@ class Script
     {
         if ($script == $from) {
             $script = $to;
-        } else {
-            if ($all) {
-                $script = str_replace($from, $to, $script);
-            } else 
-                if (false !== ($p = strpos($script, $from))) {
-                    $script = substr($script, 0, $p).$to.substr($script, $p + strlen($from), strlen($script) - $p);
-                }
+        } else if ($all) {
+            $script = str_replace($from, $to, $script);
+        } else if (false !== ($p = strpos($script, $from))) {
+            $script = substr($script, 0, $p).$to.substr($script, $p + strlen($from), strlen($script) - $p);
         }
     }
 
@@ -414,26 +411,6 @@ class Script
             }
             // replace the result
             $this->replaceScript($script, $fname, $replacement);
-            // replace matched functions
-            for ($j = $i + 1; $j < count($funcs); $j++) {
-                // replace if only match parameter
-                $repl = false;
-                for ($k = 0; $k < count($funcs[$keys[$j]]['params']); $k++) {
-                    $p = $funcs[$keys[$j]]['params'][$k];
-                    $this->replaceScript($p, $fname, $replacement, true);
-                    if ($p != $funcs[$keys[$j]]['params'][$k]) {
-                        $funcs[$keys[$j]]['params'][$k] = $p;
-                        $repl = true;
-                    }
-                }
-                if ($repl) {
-                    $p = $funcs[$keys[$j]]['match'];
-                    $this->replaceScript($p, $fname, $replacement, true);
-                    if ($p != $funcs[$keys[$j]]['match']) {
-                        $funcs[$keys[$j]]['match'] = $p;
-                    }
-                }
-            }
         }
         // eval variables
         foreach ($vars as $var) {

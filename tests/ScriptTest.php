@@ -82,6 +82,7 @@ class ScriptTest extends BaseTest
         $this->script->setContext(new TestContext());
         $this->assertEquals('#test(a,b)#test2(c,d)', $this->script->evaluate('#func(test,a,b)#func(test2,c,d)'), '->evaluate() proper evaluate combined script');
         $this->assertEquals('TESTCALLCALL', $this->script->evaluate('#callme()#test()#callme()#callres()'), '->evaluate() proper evaluate script in ordered sequence');
+        $this->assertEquals("\rA\rB", $this->script->evaluate('#ch(13)#concatw(#ch(13),"A","B")'), '->evaluate() proper evaluate script in ordered sequence 2');
         $this->assertEquals('4', $this->script->evaluate('#len(#test())'), '->evaluate() proper evaluate nested script with no parameter');
         $this->assertEquals('4', $this->script->evaluate('#len("#test()")'), '->evaluate() proper evaluate nested script with no parameter in quote');
         $this->assertEquals('23', $this->script->evaluate('#len("something(with) to #test()")'), '->evaluate() proper evaluate script with parenthesis inside');

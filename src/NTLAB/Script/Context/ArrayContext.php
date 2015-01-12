@@ -113,8 +113,12 @@ class ArrayContext implements ContextInterface
         if (count($keys = array_keys($vars))) {
             $key = array_shift($keys);
             $values = array();
-            foreach ($keys as $k) {
-                $values[] = $vars[$k];
+            if (empty($keys)) {
+                $values[] = $vars[$key];
+            } else {
+                foreach ($keys as $k) {
+                    $values[] = $vars[$k];
+                }
             }
 
             return array($vars[$key], implode(' - ', $values));

@@ -371,6 +371,18 @@ class SysString extends Module
     }
 
     /**
+     * Quote text using double quote.
+     *
+     * @param string $s  The text to quote
+     * @return string
+     * @func dq
+     */
+    public function f_DoubleQuote($s = null)
+    {
+        return sprintf('"%s"', $s);
+    }
+
+    /**
      * Evaluate if text is empty.
      *
      * @param string $s  The text

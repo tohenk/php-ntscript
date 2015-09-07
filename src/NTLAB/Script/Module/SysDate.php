@@ -44,18 +44,20 @@ class SysDate extends Module
      */
     protected function getDate($date)
     {
-        $time = null;
-        // check if date is a timestamp
-        if (is_numeric($date)) {
-            $time = (int) $date;
-        } else {
-            $time = @strtotime($date);
-        }
-        if (null !== $time) {
-            $dt = new \DateTime();
-            $dt->setTimestamp($time);
+        if (strlen($date)) {
+            $time = null;
+            // check if date is a timestamp
+            if (is_numeric($date)) {
+                $time = (int) $date;
+            } else {
+                $time = @strtotime($date);
+            }
+            if (null !== $time) {
+                $dt = new \DateTime();
+                $dt->setTimestamp($time);
 
-            return $dt;
+                return $dt;
+            }
         }
     }
 

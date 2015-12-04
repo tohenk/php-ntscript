@@ -415,7 +415,12 @@ class Script
                 if (!$this->evalFunc($token->getName(), $params, $replacement) && !$keep) {
                     $replacement = '';
                 }
-                $content .= $replacement;
+                // preserve return value type
+                if (null == $content) {
+                    $content = $replacement;
+                } else {
+                    $content .= $replacement;
+                }
                 break;
 
             case Token::TOK_VARIABLE:

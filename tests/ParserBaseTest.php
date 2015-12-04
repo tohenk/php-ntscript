@@ -19,6 +19,8 @@ abstract class ParserBaseTest extends BaseTest
 
     protected function parseVars()
     {
+        $this->parser->parse('$var');
+        $this->assertEquals(array('var'), $this->parser->getVariables(), '->parse() proper parse simple variable from script');
         $this->parser->parse('#func("$test9 it", 0, #a(\'b c d\', $e.F));');
         $this->assertEquals(array('test9', 'e.F'), $this->parser->getVariables(), '->parse() proper parse variables from script');
     }

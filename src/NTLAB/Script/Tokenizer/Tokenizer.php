@@ -240,9 +240,11 @@ class Tokenizer
                         if (!$this->checkDone()) {
                             $this->stream->prev();
                         }
-                        $this->match = Script::VARIABLE_IDENTIFIER.$this->data;
-                        $this->log(sprintf("Got variable '%s'", $this->match));
                     }
+                }
+                if (!$next) {
+                    $this->match = Script::VARIABLE_IDENTIFIER.$this->data;
+                    $this->log(sprintf("Got variable '%s'", $this->match));
                 }
                 break;
 

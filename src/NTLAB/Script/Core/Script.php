@@ -28,6 +28,7 @@ namespace NTLAB\Script\Core;
 
 use NTLAB\Script\Context\ContextIterator;
 use NTLAB\Script\Context\Stack;
+use NTLAB\Script\Tokenizer\Token;
 
 class Script
 {
@@ -333,7 +334,7 @@ class Script
                 $result = str_replace(static::VARIABLE_IDENTIFIER.$var, $value, $result);
             }
         }
-        
+
         return $retval;
     }
 
@@ -357,71 +358,88 @@ class Script
     }
 
     /**
-     * Evaluate expression.
+     * Evaluate token.
      *
-     * @param string $script  The expression
-     * @param array $funcs  The parsed functions
+     * @param NTLAB\Sscript\Tokenizer\Token $root  Functions token
      * @param array $vars  The parsed variables
      * @param array $caches  The variable caches
      * @param bool $keep  Keep unevaluated function
      * @return string
      */
-    protected function evalExpr($script, $funcs = array(), $vars = array(), $caches = null, $keep = false)
+    protected function evalToken(Token $token, $vars = array(), $caches = null, $keep = false)
     {
-        // eval functions
-        for ($i = 0; $i < count($funcs); $i++) {
-            $keys = array_keys($funcs);
-            $current = $keys[$i];
-            $fdata = $funcs[$current];
-            $fname = $fdata['match'];
-            // check if script is string and function is still exist in source
-            if (!is_string($script) || 0 == strlen($script) || false === strpos($script, $fname)) {
-                continue;
-            }
-            // evaluate parameters
-            $params = array();
-            $logic = Manager::getInstance()->isLogic($fdata['name']);
-            for ($j = 0; $j < count($fdata['params']); $j++) {
-                $eval = true;
-                if ($logic) {
-                    switch ($j) {
-                        case 1:
-                            // expect TRUE
-                            // do not process if condition is FALSE
-                            if (false === (bool) $params[0]) {
-                                $eval = false;
-                            }
-                            break;
-                        
-                        case 2:
-                            // expect FALSE
-                            // do not process if condition is TRUE
-                            if (true === (bool) $params[0]) {
-                                $eval = false;
-                            }
-                            break;
+        $content = null;
+        switch ($token->getType()) {
+            case Token::TOK_GROUP:
+                foreach ($token->getChilds() as $ctoken) {
+                    if (null != ($result = $this->evalToken($ctoken, $vars, $caches, $keep))) {
+                        // preserve return value type
+                        if (null == $content) {
+                            $content = $result;
+                        } else {
+                            $content .= $result;
+                        }
                     }
                 }
-                $params[$j] = $eval ? $this->evalExpr($fdata['params'][$j], $funcs, $vars, $caches, $keep) : null;
-            }
-            // evaluate functions
-            $replacement = $fname;
-            if (!$this->evalFunc($fdata['name'], $params, $replacement) && !$keep) {
-                $replacement = '';
-            }
-            // replace the result
-            $this->replaceScript($script, $fname, $replacement);
-        }
-        // eval variables
-        foreach ($vars as $var) {
-            // check if variable still exist
-            if (false === strpos($script, static::VARIABLE_IDENTIFIER.$var)) {
-                continue;
-            }
-            $this->evalVar($var, $script, $caches, $keep);
+                break;
+
+            case Token::TOK_FUNCTION:
+                $params = array();
+                $logic = Manager::getInstance()->isLogic($token->getName());
+                $i = 0;
+                foreach ($token->getChilds() as $ctoken) {
+                    $eval = true;
+                    if ($logic) {
+                        switch ($i) {
+                            case 1:
+                                // expect TRUE
+                                // do not process if condition is FALSE
+                                if (false === (bool) $params[0]) {
+                                    $eval = false;
+                                }
+                                break;
+                            
+                            case 2:
+                                // expect FALSE
+                                // do not process if condition is TRUE
+                                if (true === (bool) $params[0]) {
+                                    $eval = false;
+                                }
+                                break;
+                        }
+                    }
+                    $params[$i] = $eval ? $this->evalToken($ctoken, $vars, $caches, $keep) : null;
+                    $i++;
+                }
+                $replacement = $token->getContent();
+                if (!$this->evalFunc($token->getName(), $params, $replacement) && !$keep) {
+                    $replacement = '';
+                }
+                $content .= $replacement;
+                break;
+
+            case Token::TOK_VARIABLE:
+                $value = $token->getContent();
+                $this->evalVar($token->getName(), $value, $caches, $keep);
+                // preserve return value type
+                if (null == $content) {
+                    $content = $value;
+                } else {
+                    $content .= $value;
+                }
+                break;
+
+            default:
+                // preserve return value type
+                if (null == $content) {
+                    $content = $token->getContent();
+                } else {
+                    $content .= $token->getContent();
+                }
+                break;
         }
 
-        return $script;
+        return $content;
     }
 
     /**
@@ -434,12 +452,10 @@ class Script
     public function evaluate($script, $keep = false)
     {
         $caches = array();
-        $this->getParser()->parse($script);
-
-        return $this->evalExpr($script,
-            $this->getParser()->getFunctions(),
-            $this->getParser()->getVariables(),
-            $caches, $keep);
+        $parser = $this->getParser();
+        if ($token = $parser->parse($script)->getToken()) {
+            return $this->evalToken($token, $parser->getVariables(), $caches, $keep);
+        }
     }
 
     /**

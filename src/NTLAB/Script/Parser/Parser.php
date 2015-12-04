@@ -27,13 +27,14 @@
 namespace NTLAB\Script\Parser;
 
 use NTLAB\Script\Core\Script;
+use NTLAB\Script\Tokenizer\Token;
 
 abstract class Parser
 {
     /**
-     * @var array
+     * @var \NTLAB\Script\Tokenizer\Token
      */
-    protected $functions = array();
+    protected $token = null;
 
     /**
      * @var array
@@ -43,7 +44,7 @@ abstract class Parser
     /**
      * Parse a script and extract functions and/or variables.
      *
-     * Script functions then can be retrieved using getFunctions() and
+     * Script functions then can be retrieved using getToken() and
      * getVariables() respectively.
      *
      * @param string $expr  The script expression
@@ -51,11 +52,21 @@ abstract class Parser
      */
     public function parse($expr)
     {
-        $this->functions = array();
+        $this->token = null;
         $this->variables = array();
         $this->doParse($expr);
 
         return $this;
+    }
+
+    /**
+     * Get root token for parsed expression.
+     *
+     * @return \NTLAB\Script\Tokenizer\Token
+     */
+    public function getToken()
+    {
+        return $this->token;
     }
 
     /**
@@ -65,7 +76,12 @@ abstract class Parser
      */
     public function getFunctions()
     {
-        return $this->functions;
+        $functions = array();
+        if ($this->token) {
+            $this->token->collectFunctions($functions);
+        }
+
+        return $functions;
     }
 
     /**

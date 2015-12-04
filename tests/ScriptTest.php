@@ -97,6 +97,16 @@ class ScriptTest extends BaseTest
         $this->assertEquals('9 test: something', $this->script->evaluate('#if(1,"#len($var) test: $var")'), '->evaluate() proper parse if with special chars');
 
         $this->assertEquals('X1, X2, X3', $this->script->evaluate('#lcreate(x);#each($var5,"#func(ladd,x,#var(var))");#lconcat(x,", ")'), '->evaluate() proper process each and list');
+
+        $this->assertEquals(<<<EOF
+First if: it's something
+Second if: it's something too
+EOF
+        , $this->script->evaluate(<<<EOF
+First if: #if(#eq(\$var,something),"it's something","it's not something")
+Second if: #if(#eq(\$var,something),"it's something too","no, it's not something")
+EOF
+        ), '->evaluate() proper process multiple if occurance with same condition');
     }
 
     public function testIterator()

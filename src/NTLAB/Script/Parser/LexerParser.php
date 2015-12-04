@@ -38,8 +38,8 @@ class LexerParser extends Parser
     public function doParse($script)
     {
         $tokenizer = new Tokenizer();
-        if ($token = $tokenizer->tokenize($script)) {
-            $token->collect($this->functions, $this->variables);
+        if ($this->token = $tokenizer->tokenize($script)) {
+            $this->token->collectVars($this->variables);
         }
 
         unset($tokenizer);

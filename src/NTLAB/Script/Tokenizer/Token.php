@@ -50,7 +50,7 @@ class Token implements \ArrayAccess, \Iterator, \Countable
     protected $content = null;
 
     /**
-     * @var \NTLAB\Script\Tokenizer[]
+     * @var \NTLAB\Script\Tokenizer\Token[]
      */
     protected $childs = array();
 
@@ -153,33 +153,13 @@ class Token implements \ArrayAccess, \Iterator, \Countable
     }
 
     /**
-     * Collect functions and variables.
+     * Get child tokens.
      *
-     * @param array $functions  The functions result
-     * @param array $variables  The variables result
+     * @return \NTLAB\Script\Tokenizer\Token[]
      */
-    public function collect(&$functions, &$variables)
+    public function getChilds()
     {
-        // collect self
-        switch ($this->getType()) {
-            case static::TOK_FUNCTION:
-                $functions[] = array(
-                    'name' => $this->getName(),
-                    'match' => $this->getContent(),
-                    'params' => $this->getParams()
-                );
-                break;
-
-            case static::TOK_VARIABLE:
-                if (!in_array($this->getName(), $variables)) {
-                    $variables[] = $this->getName();
-                }
-                break;
-        }
-        // collect child
-        foreach ($this->childs as $child) {
-            $child->collect($functions, $variables);
-        }
+        return $this->childs;
     }
 
     /**
@@ -193,7 +173,7 @@ class Token implements \ArrayAccess, \Iterator, \Countable
         foreach ($this->childs as $child) {
             $result .= $child->getContent();
         }
-        
+
         return $result;
     }
 
@@ -210,6 +190,56 @@ class Token implements \ArrayAccess, \Iterator, \Countable
         }
 
         return $result;
+    }
+
+    /**
+     * Collect functions.
+     *
+     * @param array $functions  The functions result
+     */
+    public function collectFunctions(&$functions)
+    {
+        // collect self
+        switch ($this->getType()) {
+            case static::TOK_FUNCTION:
+                $functions[] = array(
+                    'name' => $this->getName(),
+                    'match' => $this->getContent(),
+                    'params' => $this->getParams()
+                );
+                break;
+
+            default:
+                break;
+        }
+        // collect child
+        foreach ($this->childs as $child) {
+            $child->collectFunctions($functions);
+        }
+    }
+
+    /**
+     * Collect variables.
+     *
+     * @param array $variables  The variables result
+     */
+    public function collectVars(&$variables)
+    {
+        // collect self
+        switch ($this->getType()) {
+            case static::TOK_VARIABLE:
+                if (!in_array($this->getName(), $variables)) {
+                    $variables[] = $this->getName();
+                }
+                break;
+
+            default:
+                break;
+        }
+        // collect child
+        foreach ($this->childs as $child) {
+            $child->collectVars($variables);
+        }
     }
 
     public function offsetExists($offset)

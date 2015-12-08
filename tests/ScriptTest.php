@@ -68,6 +68,13 @@ class ScriptTest extends BaseTest
         $this->assertEquals(null, $this->script->evaluate('$var2.notexist'), '->evaluate() proper replace variable with __call() with exception');
     }
 
+    public function testNonScript()
+    {
+        $this->assertEquals('something', $this->script->evaluate('something'), '->evaluate() proper evaluate non script');
+        $this->assertEquals('123', $this->script->evaluate('123'), '->evaluate() proper evaluate non script');
+        $this->assertEquals('this text is indeed not long.', $this->script->evaluate('this text is indeed not long.'), '->evaluate() proper evaluate non script');
+    }
+
     public function testContext()
     {
         $array = array('var' => 'something', 'Var2' => new TestContext2(), 'VAR3' => 'VAR3');

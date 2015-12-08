@@ -309,11 +309,11 @@ class Tokenizer
                             $this->data .= $this->stream->getChar();
                         }
                     }
-                    if (!$next) {
-                        $this->match = $this->data;
-                        $this->data = null;
-                        $this->log(sprintf("Got text '%s'", $this->match));
-                    }
+                }
+                if (!$next) {
+                    $this->match = $this->data;
+                    $this->data = null;
+                    $this->log(sprintf("Got text '%s'", $this->match));
                 }
                 break;
         }

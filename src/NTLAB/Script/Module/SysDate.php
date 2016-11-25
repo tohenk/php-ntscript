@@ -44,6 +44,9 @@ class SysDate extends Module
      */
     protected function getDate($date)
     {
+        if ($date instanceof \DateTime) {
+            return $date;
+        }
         if (strlen($date)) {
             $time = null;
             // check if date is a timestamp

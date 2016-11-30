@@ -50,6 +50,7 @@ class SysString extends Module
     public function f_Split($s, $count, $separator = ' ')
     {
         $value = null;
+        $s = $this->expectString($s);
         while (true) {
             if (0 == strlen($s)) {
                 break;
@@ -74,7 +75,7 @@ class SysString extends Module
      */
     public function f_Ucfirst($s)
     {
-        return ucfirst($s);
+        return ucfirst($this->expectString($s));
     }
 
     /**
@@ -86,7 +87,7 @@ class SysString extends Module
      */
     public function f_Ucwords($s)
     {
-        return ucwords($s);
+        return ucwords($this->expectString($s));
     }
 
     /**
@@ -98,7 +99,7 @@ class SysString extends Module
      */
     public function f_Upper($s)
     {
-        return strtoupper($s);
+        return strtoupper($this->expectString($s));
     }
 
     /**
@@ -110,7 +111,7 @@ class SysString extends Module
      */
     public function f_Lower($s)
     {
-        return strtolower($s);
+        return strtolower($this->expectString($s));
     }
 
     /**
@@ -122,7 +123,7 @@ class SysString extends Module
      */
     public function f_Trim($s)
     {
-        return trim($s);
+        return trim($this->expectString($s));
     }
 
     /**
@@ -136,7 +137,7 @@ class SysString extends Module
      */
     public function f_Concat($s1, $s2, $delimeter = '')
     {
-        return $s1.$delimeter.$s2;
+        return $this->expectString($s1).$this->expectString($delimeter).$this->expectString($s2);
     }
 
     /**
@@ -159,7 +160,7 @@ class SysString extends Module
                 if (null !== $value) {
                     $value .= $delimeter;
                 }
-                $value .= $arg;
+                $value .= $this->expectString($arg);
             }
         }
 
@@ -180,7 +181,7 @@ class SysString extends Module
         $args = func_get_args();
         $value = null;
         foreach ($args as $arg) {
-            $value .= $arg;
+            $value .= $this->expectString($arg);
         }
 
         return $value;
@@ -213,7 +214,7 @@ class SysString extends Module
      */
     public function f_Repeat($s, $count)
     {
-        return str_repeat($s, $count);
+        return str_repeat($this->expectString($s), $count);
     }
 
     /**
@@ -226,7 +227,7 @@ class SysString extends Module
      */
     public function f_Pos($search, $s)
     {
-        return strpos($s, $search);
+        return strpos($this->expectString($s), $search);
     }
 
     /**
@@ -239,7 +240,7 @@ class SysString extends Module
      */
     public function f_Strpos($s, $search)
     {
-        return strpos($s, $search);
+        return strpos($this->expectString($s), $search);
     }
 
     /**
@@ -251,7 +252,7 @@ class SysString extends Module
      */
     public function f_Len($s)
     {
-        return strlen($s);
+        return strlen($this->expectString($s));
     }
 
     /**
@@ -301,7 +302,7 @@ class SysString extends Module
      */
     public function f_SplitDelimeter($s, $delim, $element)
     {
-        $array = explode($delim, $s);
+        $array = explode($this->expectString($delim), $this->expectString($s));
 
         return isset($array[$element]) ? $array[$element] : null;
     }
@@ -316,7 +317,7 @@ class SysString extends Module
      */
     public function f_Left($s, $count)
     {
-        return substr($s, 0, $count);
+        return substr($this->expectString($s), 0, $count);
     }
 
     /**
@@ -329,7 +330,7 @@ class SysString extends Module
      */
     public function f_Right($s, $count)
     {
-        return substr($s, - $count);
+        return substr($this->expectString($s), - $count);
     }
 
     /**
@@ -343,7 +344,7 @@ class SysString extends Module
      */
     public function f_Substr($s, $start, $count)
     {
-        return substr($s, $start, $count);
+        return substr($this->expectString($s), $start, $count);
     }
 
     /**
@@ -355,7 +356,7 @@ class SysString extends Module
      */
     public function f_Enclose($s = null)
     {
-        return sprintf('(%s)', $s);
+        return sprintf('(%s)', $this->expectString($s));
     }
 
     /**
@@ -367,7 +368,7 @@ class SysString extends Module
      */
     public function f_Quote($s = null)
     {
-        return sprintf('\'%s\'', $s);
+        return sprintf('\'%s\'', $this->expectString($s));
     }
 
     /**
@@ -379,7 +380,7 @@ class SysString extends Module
      */
     public function f_DoubleQuote($s = null)
     {
-        return sprintf('"%s"', $s);
+        return sprintf('"%s"', $this->expectString($s));
     }
 
     /**
@@ -391,7 +392,7 @@ class SysString extends Module
      */
     public function f_Empty($s)
     {
-        return Script::asBool(strlen($s) == 0);
+        return Script::asBool(strlen($this->expectString($s)) == 0);
     }
 
     /**
@@ -403,6 +404,6 @@ class SysString extends Module
      */
     public function f_NotEmpty($s)
     {
-        return Script::asBool(strlen($s) > 0);
+        return Script::asBool(strlen($this->expectString($s)) > 0);
     }
 }

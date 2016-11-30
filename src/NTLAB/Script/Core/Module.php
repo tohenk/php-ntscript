@@ -93,6 +93,23 @@ class Module
     }
 
     /**
+     * Ensure value is properly converted to string.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function expectString($value)
+    {
+        if (null !== $value) {
+            if ($value instanceof \DateTime) {
+                $value = $value->format(\DateTime::ISO8601);
+            }
+        }
+
+        return $value;
+    }
+
+    /**
      * Get module id.
      *
      * @return string

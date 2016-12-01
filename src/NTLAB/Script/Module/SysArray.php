@@ -52,7 +52,9 @@ class SysArray extends Module
      */
     public function f_Each($objects, $expr, $decode = false)
     {
-        if (is_array($objects) || is_a($objects, 'ArrayObject')) {
+        if (is_array($objects) ||
+            $objects instanceof \ArrayObject ||
+            $objects instanceof \ArrayAccess) {
             if ($decode) {
                 $expr = base64_decode($expr);
             }

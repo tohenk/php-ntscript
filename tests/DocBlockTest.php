@@ -11,7 +11,7 @@ class DocBlockTest extends BaseTest
      */
     protected $reflection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reflection = new \ReflectionClass(get_class($this));
     }

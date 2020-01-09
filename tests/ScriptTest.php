@@ -29,7 +29,7 @@ class ScriptTest extends BaseTest
         'test.core'       => array('callme', 'callres', 'test'),
     );
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->script = new Script();
     }

@@ -6,7 +6,7 @@ use NTLAB\Script\Parser\LexerParser;
 
 class ParserLexerTest extends ParserBaseTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->parser = new LexerParser();
     }

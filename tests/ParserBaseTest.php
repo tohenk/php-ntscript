@@ -2,8 +2,6 @@
 
 namespace NTLAB\Script\Test;
 
-use NTLAB\Script\Parser\Parser;
-
 abstract class ParserBaseTest extends BaseTest
 {
     /**

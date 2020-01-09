@@ -26,7 +26,6 @@
 
 namespace NTLAB\Script\Provider;
 
-use NTLAB\Script\Core\Manager;
 use NTLAB\Script\Module\SysCore;
 use NTLAB\Script\Module\SysLogic;
 use NTLAB\Script\Module\SysStack;
@@ -40,7 +39,7 @@ use NTLAB\Script\Module\SysContext;
 class SystemProvider implements ProviderInterface
 {
     /**
-     * @var \NTLAB\Script\Module\Module[]
+     * @var \NTLAB\Script\Core\Module[]
      */
     protected $modules = null;
 

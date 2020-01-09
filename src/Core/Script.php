@@ -126,7 +126,7 @@ class Script
         if (is_callable($callback)) {
             $debugs = debug_backtrace(version_compare(PHP_VERSION, '5.3.6', '>=') ? DEBUG_BACKTRACE_PROVIDE_OBJECT : true);
             // this is current function debug backtrace
-            $current = array_shift($debugs);
+            array_shift($debugs);
             // this is the current function caller debug backtrace
             $caller = array_shift($debugs);
             $i = 0;
@@ -147,7 +147,7 @@ class Script
     /**
      * Push current script context.
      *
-     * @throws RuntimeException
+     * @throws \RuntimeException
      * @return \NTLAB\Script\Core\Script
      */
     public function pushContext()
@@ -163,7 +163,7 @@ class Script
     /**
      * Pop last pushed script context.
      *
-     * @throws RuntimeException
+     * @throws \RuntimeException
      * @return \NTLAB\Script\Core\Script
      */
     public function popContext()
@@ -360,7 +360,7 @@ class Script
     /**
      * Evaluate token.
      *
-     * @param NTLAB\Sscript\Tokenizer\Token $root  Functions token
+     * @param \NTLAB\Script\Tokenizer\Token $root  Functions token
      * @param array $vars  The parsed variables
      * @param array $caches  The variable caches
      * @param bool $keep  Keep unevaluated function

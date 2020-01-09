@@ -26,9 +26,6 @@
 
 namespace NTLAB\Script\Parser;
 
-use NTLAB\Script\Core\Script;
-use NTLAB\Script\Tokenizer\Token;
-
 abstract class Parser
 {
     /**

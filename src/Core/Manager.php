@@ -254,7 +254,7 @@ class Manager
     /**
      * Add script module.
      *
-     * @param \NTLAB\Script\Module\Module $module  The module to add
+     * @param \NTLAB\Script\Core\Module $module  The module to add
      * @return \NTLAB\Script\Core\Manager
      */
     public function addModule(Module $module)
@@ -271,7 +271,7 @@ class Manager
      * Get script module instance.
      *
      * @param string $id  The module id
-     * @return \NTLAB\Script\Module\Module
+     * @return \NTLAB\Script\Core\Module
      */
     public function getModule($id)
     {
@@ -303,7 +303,7 @@ class Manager
      * Register script function.
      *
      * @param string $name  The function name
-     * @param \NTLAB\Script\Core\Function $func  The function object
+     * @param \NTLAB\Script\Core\Func $func  The function object
      * @return \NTLAB\Script\Core\Manager
      */
     protected function registerFunc($name, $func)

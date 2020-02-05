@@ -372,9 +372,9 @@ class Script
         switch ($token->getType()) {
             case Token::TOK_GROUP:
                 foreach ($token->getChilds() as $ctoken) {
-                    if (null != ($result = $this->evalToken($ctoken, $vars, $caches, $keep))) {
+                    if (null !== ($result = $this->evalToken($ctoken, $vars, $caches, $keep))) {
                         // preserve return value type
-                        if (null == $content) {
+                        if (null === $content) {
                             $content = $result;
                         } else {
                             $content .= $result;
@@ -416,7 +416,7 @@ class Script
                     $replacement = '';
                 }
                 // preserve return value type
-                if (null == $content) {
+                if (null === $content) {
                     $content = $replacement;
                 } else {
                     $content .= $replacement;
@@ -427,7 +427,7 @@ class Script
                 $value = $token->getContent();
                 $this->evalVar($token->getName(), $value, $caches, $keep);
                 // preserve return value type
-                if (null == $content) {
+                if (null === $content) {
                     $content = $value;
                 } else {
                     $content .= $value;
@@ -436,7 +436,7 @@ class Script
 
             default:
                 // preserve return value type
-                if (null == $content) {
+                if (null === $content) {
                     $content = $token->getContent();
                 } else {
                     $content .= $token->getContent();

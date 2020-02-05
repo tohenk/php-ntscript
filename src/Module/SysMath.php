@@ -50,10 +50,12 @@ class SysMath extends Module
         $value = null;
         $args = func_get_args();
         for ($i = 0; $i < count($args); $i ++) {
-            if ($i == 0) {
-                $value = $args[$i];
-            } else {
-                $value += $args[$i];
+            if (is_numeric($args[$i])) {
+                if ($i == 0) {
+                    $value = $args[$i];
+                } else {
+                    $value += $args[$i];
+                }
             }
         }
 
@@ -74,10 +76,12 @@ class SysMath extends Module
         $value = null;
         $args = func_get_args();
         for ($i = 0; $i < count($args); $i ++) {
-            if ($i == 0) {
-                $value = $args[$i];
-            } else {
-                $value -= $args[$i];
+            if (is_numeric($args[$i])) {
+                if ($i == 0) {
+                    $value = $args[$i];
+                } else {
+                    $value -= $args[$i];
+                }
             }
         }
 
@@ -98,10 +102,12 @@ class SysMath extends Module
         $value = null;
         $args = func_get_args();
         for ($i = 0; $i < count($args); $i ++) {
-            if ($i == 0) {
-                $value = $args[$i];
-            } else {
-                $value *= $args[$i];
+            if (is_numeric($args[$i])) {
+                if ($i == 0) {
+                    $value = $args[$i];
+                } else {
+                    $value *= $args[$i];
+                }
             }
         }
 
@@ -122,10 +128,12 @@ class SysMath extends Module
         $value = null;
         $args = func_get_args();
         for ($i = 0; $i < count($args); $i ++) {
-            if ($i == 0) {
-                $value = $args[$i];
-            } else {
-                $value /= $args[$i];
+            if (is_numeric($args[$i])) {
+                if ($i == 0) {
+                    $value = $args[$i];
+                } else {
+                    $value /= $args[$i];
+                }
             }
         }
 
@@ -142,7 +150,9 @@ class SysMath extends Module
      */
     public function f_Mod($value1, $value2)
     {
-        return $value1 % $value2;
+        if (is_numeric($value1) && is_numeric($value2)) {
+            return $value1 % $value2;
+        }
     }
 
     /**
@@ -154,7 +164,9 @@ class SysMath extends Module
      */
     public function f_Inc($value)
     {
-        return $value++;
+        if (is_numeric($value)) {
+            return ++$value;
+        }
     }
 
     /**
@@ -166,7 +178,9 @@ class SysMath extends Module
      */
     public function f_Dec($value)
     {
-        return $value--;
+        if (is_numeric($value)) {
+            return --$value;
+        }
     }
 
     /**

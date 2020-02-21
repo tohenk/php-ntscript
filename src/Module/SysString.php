@@ -348,6 +348,34 @@ class SysString extends Module
     }
 
     /**
+     * Pick first word from `s`.
+     *
+     * @param string $s  The text
+     * @return string
+     * @func firstw
+     */
+    public function f_FirstWord($s)
+    {
+        if (count($words = explode(' ', $s))) {
+            return $words[0];
+        }
+    }
+
+    /**
+     * Pick last word from `s`.
+     *
+     * @param string $s  The text
+     * @return string
+     * @func lastw
+     */
+    public function f_LastWord($s)
+    {
+        if (count($words = explode(' ', $s))) {
+            return $words[count($words) - 1];
+        }
+    }
+
+    /**
      * Enclose text in parenthesis.
      *
      * @param string $s  The text to enclose

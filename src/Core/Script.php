@@ -358,6 +358,28 @@ class Script
     }
 
     /**
+     * Set content from result and preserve orginal result if applicable.
+     *
+     * @param mixed $content
+     * @param mixed $result
+     * @return \NTLAB\Script\Core\Script
+     */
+    protected function preserveContent(&$content, $result)
+    {
+        // preserve return value type
+        if (null === $content) {
+            $content = $result;
+        } else {
+            if (is_array($result)) {
+                error_log(sprintf('Preserving array with existing content %s!', $content));
+            }
+            $content .= $result;
+        }
+
+        return $this;
+    }
+
+    /**
      * Evaluate token.
      *
      * @param \NTLAB\Script\Tokenizer\Token $root  Functions token
@@ -373,12 +395,7 @@ class Script
             case Token::TOK_GROUP:
                 foreach ($token->getChilds() as $ctoken) {
                     if (null !== ($result = $this->evalToken($ctoken, $vars, $caches, $keep))) {
-                        // preserve return value type
-                        if (null === $content) {
-                            $content = $result;
-                        } else {
-                            $content .= $result;
-                        }
+                        $this->preserveContent($content, $result);
                     }
                 }
                 break;
@@ -415,32 +432,17 @@ class Script
                 if (!$this->evalFunc($token->getName(), $params, $replacement) && !$keep) {
                     $replacement = '';
                 }
-                // preserve return value type
-                if (null === $content) {
-                    $content = $replacement;
-                } else {
-                    $content .= $replacement;
-                }
+                $this->preserveContent($content, $replacement);
                 break;
 
             case Token::TOK_VARIABLE:
                 $value = $token->getContent();
                 $this->evalVar($token->getName(), $value, $caches, $keep);
-                // preserve return value type
-                if (null === $content) {
-                    $content = $value;
-                } else {
-                    $content .= $value;
-                }
+                $this->preserveContent($content, $value);
                 break;
 
             default:
-                // preserve return value type
-                if (null === $content) {
-                    $content = $token->getContent();
-                } else {
-                    $content .= $token->getContent();
-                }
+                $this->preserveContent($content, $token->getContent());
                 break;
         }
 

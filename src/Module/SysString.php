@@ -214,7 +214,7 @@ class SysString extends Module
      */
     public function f_Repeat($s, $count)
     {
-        return str_repeat($this->expectString($s), $count);
+        return str_repeat($this->expectString($s), max($count, 0));
     }
 
     /**

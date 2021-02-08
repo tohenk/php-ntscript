@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -31,14 +31,14 @@ class ArrayVar implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * @var array
      */
-    protected $vars = array();
+    protected $vars = [];
 
     /**
      * Constructor.
      *
      * @param array $vars  The variables
      */
-    public function __construct($vars = array())
+    public function __construct($vars = [])
     {
         foreach ($vars as $k => $v) {
             $this->add($k, $v);
@@ -63,7 +63,6 @@ class ArrayVar implements \ArrayAccess, \IteratorAggregate, \Countable
     public function add($name, $value)
     {
         $this->vars[$name] = $value;
-
         return $this;
     }
 
@@ -107,7 +106,7 @@ class ArrayVar implements \ArrayAccess, \IteratorAggregate, \Countable
         if ('get' === substr($method, 0, 3)) {
             $method = substr($method, 3);
             // try original, ucfirst, lower, upper
-            foreach (array($method, ucfirst(strtolower($method)), strtolower($method), strtoupper($method)) as $name) {
+            foreach ([$method, ucfirst(strtolower($method)), strtolower($method), strtoupper($method)] as $name) {
                 if (array_key_exists($name, $this->vars)) {
                     $var = $name;
                     break;
@@ -118,7 +117,6 @@ class ArrayVar implements \ArrayAccess, \IteratorAggregate, \Countable
             throw new \InvalidArgumentException(sprintf('Unknown method %s::%s.', __CLASS__, $method));
         }
         $value = $this->vars[$var];
-
         return $value;
     }
 }

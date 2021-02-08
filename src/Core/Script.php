@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -50,7 +50,7 @@ class Script
     /**
      * @var \NTLAB\Script\Context\Stack[]
      */
-    protected $stacks = array();
+    protected $stacks = [];
 
     /**
      * @var \NTLAB\Script\Context\ContextIterator
@@ -110,7 +110,6 @@ class Script
     public function setObjects($objects)
     {
         $this->iterator->setObjects($objects);
-
         return $this;
     }
 
@@ -140,7 +139,6 @@ class Script
                 call_user_func($callback, $this, isset($caller['object']) ? $caller['object'] : $this);
             }
         }
-
         return $this;
     }
 
@@ -156,7 +154,6 @@ class Script
             throw new \RuntimeException('No script context available.');
         }
         array_push($this->stacks, new Stack($this));
-
         return $this;
     }
 
@@ -174,7 +171,6 @@ class Script
         $stack = array_pop($this->stacks);
         $stack->restore();
         unset($stack);
-
         return $this;
     }
 
@@ -197,7 +193,6 @@ class Script
     public function setContext($context)
     {
         $this->context = $context;
-
         return $this;
     }
 
@@ -213,10 +208,8 @@ class Script
     {
         if ($this->manager->has($func)) {
             $result = $this->manager->call($this, $func, $parameters);
-
             return true;
         }
-
         return false;
     }
 
@@ -295,13 +288,11 @@ class Script
                     } else {
                         $var = $context->$method();
                     }
-
                     return true;
                 } catch (\Exception $e) {
                 }
             }
         }
-
         return false;
     }
 
@@ -334,7 +325,6 @@ class Script
                 $result = str_replace(static::VARIABLE_IDENTIFIER.$var, $value, $result);
             }
         }
-
         return $retval;
     }
 
@@ -375,7 +365,6 @@ class Script
             }
             $content .= $result;
         }
-
         return $this;
     }
 
@@ -388,23 +377,22 @@ class Script
      * @param bool $keep  Keep unevaluated function
      * @return string
      */
-    protected function evalToken(Token $token, $vars = array(), $caches = null, $keep = false)
+    protected function evalToken(Token $token, $vars = [], $caches = null, $keep = false)
     {
         $content = null;
         switch ($token->getType()) {
             case Token::TOK_GROUP:
-                foreach ($token->getChilds() as $ctoken) {
+                foreach ($token->getChildren() as $ctoken) {
                     if (null !== ($result = $this->evalToken($ctoken, $vars, $caches, $keep))) {
                         $this->preserveContent($content, $result);
                     }
                 }
                 break;
-
             case Token::TOK_FUNCTION:
-                $params = array();
+                $params = [];
                 $logic = Manager::getInstance()->isLogic($token->getName());
                 $i = 0;
-                foreach ($token->getChilds() as $ctoken) {
+                foreach ($token->getChildren() as $ctoken) {
                     $eval = true;
                     if ($logic) {
                         switch ($i) {
@@ -415,7 +403,6 @@ class Script
                                     $eval = false;
                                 }
                                 break;
-                            
                             case 2:
                                 // expect FALSE
                                 // do not process if condition is TRUE
@@ -434,18 +421,15 @@ class Script
                 }
                 $this->preserveContent($content, $replacement);
                 break;
-
             case Token::TOK_VARIABLE:
                 $value = $token->getContent();
                 $this->evalVar($token->getName(), $value, $caches, $keep);
                 $this->preserveContent($content, $value);
                 break;
-
             default:
                 $this->preserveContent($content, $token->getContent());
                 break;
         }
-
         return $content;
     }
 
@@ -458,7 +442,7 @@ class Script
      */
     public function evaluate($script, $keep = false)
     {
-        $caches = array();
+        $caches = [];
         $parser = $this->getParser();
         if ($token = $parser->parse($script)->getToken()) {
             return $this->evalToken($token, $parser->getVariables(), $caches, $keep);

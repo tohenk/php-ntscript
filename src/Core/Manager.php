@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -59,21 +59,21 @@ class Manager
     /**
      * @var \NTLAB\Script\Provider\ProviderInterface[]
      */
-    protected static $providers = array();
+    protected static $providers = [];
 
     /**
      * @var \NTLAB\Script\Listener\ListenerInterface[]
      */
-    protected static $listeners = array();
+    protected static $listeners = [];
 
     /**
      * @var \NTLAB\Script\Context\ContextInterface[]
      */
-    protected static $contexes = array(
-        self::CONTEXT_PRIO_HIGH => array(),
-        self::CONTEXT_PRIO_NORMAL => array(),
-        self::CONTEXT_PRIO_LOW => array(),
-    );
+    protected static $contexes = [
+        self::CONTEXT_PRIO_HIGH => [],
+        self::CONTEXT_PRIO_NORMAL => [],
+        self::CONTEXT_PRIO_LOW => [],
+    ];
 
     /**
      * @var \NTLAB\Script\Parser\Parser
@@ -83,17 +83,17 @@ class Manager
     /**
      * @var \NTLAB\Script\Core\Module[]
      */
-    protected $modules = array();
+    protected $modules = [];
 
     /**
      * @var \NTLAB\Script\Core\Func[]
      */
-    protected $functions = array();
+    protected $functions = [];
 
     /**
      * @var array
      */
-    protected $logics = array();
+    protected $logics = [];
 
     /**
      * Get script manager instance.
@@ -109,7 +109,6 @@ class Manager
                 ->notifyModuleRegister()
             ;
         }
-
         return self::$instance;
     }
 
@@ -203,7 +202,6 @@ class Manager
                 $this->addModule($module);
             }
         }
-
         return $this;
     }
 
@@ -217,7 +215,6 @@ class Manager
         foreach (self::$listeners as $listener) {
             $listener->notifyModuleRegister($this);
         }
-
         return $this;
     }
 
@@ -233,7 +230,6 @@ class Manager
         foreach (self::$listeners as $listener) {
             $listener->notifyContextChange($context, $iterator);
         }
-
         return $this;
     }
 
@@ -247,7 +243,6 @@ class Manager
         if (null === self::$parser) {
             $this->registerParser(new LexerParser());
         }
-
         return self::$parser;
     }
 
@@ -263,7 +258,6 @@ class Manager
             $this->modules[$id] = $module;
             $module->setManager($this)->register();
         }
-
         return $this;
     }
 
@@ -286,7 +280,7 @@ class Manager
      */
     public function add(Func $func)
     {
-        foreach (array($func->getName(), $func->getAlias()) as $name) {
+        foreach ([$func->getName(), $func->getAlias()] as $name) {
             if (null === $name) {
                 continue;
             }
@@ -295,7 +289,6 @@ class Manager
                 $this->registerLogic($name);
             }
         }
-
         return $this;
     }
 
@@ -311,7 +304,6 @@ class Manager
         if (!isset($this->functions[$name])) {
             $this->functions[$name] = $func;
         }
-
         return $this;
     }
 
@@ -326,7 +318,6 @@ class Manager
         if (!in_array($name, $this->logics)) {
             $this->logics[] = $name;
         }
-
         return $this;
     }
 
@@ -345,7 +336,6 @@ class Manager
                 $this->registerLogic($alias);
             }
         }
-
         return $this;
     }
 
@@ -392,7 +382,7 @@ class Manager
      * @param array $parameters  The parameters
      * @return string
      */
-    public function call(Script $caller, $name, $parameters = array())
+    public function call(Script $caller, $name, $parameters = [])
     {
         if ($this->has($name) && ($func = $this->getFunc($name))) {
             if (count($parameters) >= $func->getParameterCount()) {
@@ -448,7 +438,7 @@ class Manager
      */
     public function dump($module = null, $size = 80)
     {
-        $result = array();
+        $result = [];
         $result[] = str_repeat('*', $size);
         $result[] = 'NTScript version '.self::VERSION;
         $result[] = str_repeat('*', $size);
@@ -477,7 +467,6 @@ class Manager
             $result[] = '';
         }
         $result[] = 'Total functions: '.$count;
-
         return $result;
     }
 }

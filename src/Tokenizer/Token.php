@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -52,7 +52,7 @@ class Token implements \ArrayAccess, \Iterator, \Countable
     /**
      * @var \NTLAB\Script\Tokenizer\Token[]
      */
-    protected $childs = array();
+    protected $children = [];
 
     /**
      * @var int
@@ -88,7 +88,6 @@ class Token implements \ArrayAccess, \Iterator, \Countable
     public function setType($type)
     {
         $this->type = $type;
-        
         return $this;
     }
 
@@ -111,7 +110,6 @@ class Token implements \ArrayAccess, \Iterator, \Countable
     public function setName($name)
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -134,7 +132,6 @@ class Token implements \ArrayAccess, \Iterator, \Countable
     public function setContent($content)
     {
         $this->content = $content;
-
         return $this;
     }
 
@@ -146,9 +143,8 @@ class Token implements \ArrayAccess, \Iterator, \Countable
      */
     public function addChild(Token $child)
     {
-        $this->childs[] = $child;
+        $this->children[] = $child;
         $this->rewind();
-
         return $this;
     }
 
@@ -157,9 +153,9 @@ class Token implements \ArrayAccess, \Iterator, \Countable
      *
      * @return \NTLAB\Script\Tokenizer\Token[]
      */
-    public function getChilds()
+    public function getChildren()
     {
-        return $this->childs;
+        return $this->children;
     }
 
     /**
@@ -167,13 +163,12 @@ class Token implements \ArrayAccess, \Iterator, \Countable
      *
      * @return string
      */
-    public function getChildsContent()
+    public function getChildrenContent()
     {
         $result = null;
-        foreach ($this->childs as $child) {
+        foreach ($this->children as $child) {
             $result .= $child->getContent();
         }
-
         return $result;
     }
 
@@ -184,11 +179,10 @@ class Token implements \ArrayAccess, \Iterator, \Countable
      */
     public function getParams()
     {
-        $result = array();
-        foreach ($this->childs as $child) {
-            $result[] = $child->getChildsContent();
+        $result = [];
+        foreach ($this->children as $child) {
+            $result[] = $child->getChildrenContent();
         }
-
         return $result;
     }
 
@@ -202,18 +196,15 @@ class Token implements \ArrayAccess, \Iterator, \Countable
         // collect self
         switch ($this->getType()) {
             case static::TOK_FUNCTION:
-                $functions[] = array(
+                $functions[] = [
                     'name' => $this->getName(),
                     'match' => $this->getContent(),
                     'params' => $this->getParams()
-                );
-                break;
-
-            default:
+                ];
                 break;
         }
         // collect child
-        foreach ($this->childs as $child) {
+        foreach ($this->children as $child) {
             $child->collectFunctions($functions);
         }
     }
@@ -232,57 +223,52 @@ class Token implements \ArrayAccess, \Iterator, \Countable
                     $variables[] = $this->getName();
                 }
                 break;
-
-            default:
-                break;
         }
         // collect child
-        foreach ($this->childs as $child) {
+        foreach ($this->children as $child) {
             $child->collectVars($variables);
         }
     }
 
     public function offsetExists($offset)
     {
-        return isset($this->childs[$offset]);
+        return isset($this->children[$offset]);
     }
 
     public function offsetGet($offset)
     {
-        return $this->childs[$offset];
+        return $this->children[$offset];
     }
 
     public function offsetSet($offset, $value)
     {
-        $this->childs[$offset] = $value;
+        $this->children[$offset] = $value;
     }
 
     public function offsetUnset($offset)
     {
-        unset($this->childs[$offset]);
+        unset($this->children[$offset]);
     }
 
     public function rewind()
     {
-        reset($this->childs);
-
-        $this->count = count($this->childs);
+        reset($this->children);
+        $this->count = count($this->children);
     }
 
     public function key()
     {
-        return key($this->childs);
+        return key($this->children);
     }
 
     public function current()
     {
-        return current($this->childs);
+        return current($this->children);
     }
 
     public function next()
     {
-        next($this->childs);
-        
+        next($this->children);
         $this->count--;
     }
 
@@ -293,6 +279,6 @@ class Token implements \ArrayAccess, \Iterator, \Countable
 
     public function count()
     {
-        return count($this->childs);
+        return count($this->children);
     }
 }

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -74,7 +74,7 @@ class Func
      * @param \NTLAB\Script\Core\Module $module  Module owner
      * @param array $parameters  Function data
      */
-    public function __construct($module, $parameters = array())
+    public function __construct($module, $parameters = [])
     {
         $this->module = $module;
         foreach ($parameters as $k => $v) {
@@ -82,27 +82,21 @@ class Func
                 case 'name':
                     $this->name = $v;
                     break;
-
                 case 'description':
                     $this->description = $v;
                     break;
-
                 case 'syntax':
                     $this->syntax = $v;
                     break;
-
                 case 'param_cnt':
                     $this->paramCount = (int) $v;
                     break;
-
                 case 'method':
                     $this->method = $v;
                     break;
-
                 case 'logic':
                     $this->logic = (bool) $v;
                     break;
-
                 case 'alias':
                     $this->alias = $v;
                     break;

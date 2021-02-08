@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -124,17 +124,16 @@ class Tokenizer
                             $this->log(sprintf("Tokenize done due to quote '%s'", $this->quote));
                             break;
                         }
-                    } elseif ($this->stream->is(array(
+                    } elseif ($this->stream->is([
                         Script::FUNCTION_PARAM_END,
                         Script::PARAM_SEPARATOR
-                    ))) {
+                    ])) {
                         $this->log(sprintf("Tokenize done due to '%s'", $this->stream->getChar()));
                         break;
                     }
                 }
             }
             $this->log(sprintf("Tokenize processed '%s'", $this->stream->pick($p, $this->stream->getPos() - $p)));
-
             return $result;
         }
     }
@@ -190,11 +189,9 @@ class Tokenizer
                 case $this->stream->is(Script::VARIABLE_IDENTIFIER):
                     $token = Token::TOK_VARIABLE;
                     break;
-
                 case $this->stream->is(Script::FUNCTION_IDENTIFIER):
                     $token = Token::TOK_FUNCTION;
                     break;
-
                 case static::TOKENIZE_PARAMETER === $this->tok && $this->stream->is(array(Script::PARAM_QUOTE, Script::PARAM_QUOTE_SINGLE)):
                     // is this first occurance of quote?
                     if (null === $this->quote) {
@@ -212,14 +209,12 @@ class Tokenizer
                         $this->data = $this->stream->getChar();
                     }
                     break;
-
                 default:
                     $token = Token::TOK_TEXT;
                     $this->data = $this->stream->getChar();
                     break;
             }
         }
-
         return $token;
     }
 
@@ -247,7 +242,6 @@ class Tokenizer
                     $this->log(sprintf("Got variable '%s'", $this->match));
                 }
                 break;
-
             case Token::TOK_FUNCTION:
                 // need valid identifier for function name
                 if ($next) {
@@ -295,14 +289,13 @@ class Tokenizer
                     $this->data = null;
                 }
                 break;
-
             default:
                 if ($next) {
                     if ($this->checkDone()) {
                         $next = false;
                     } else {
                         // check if function or variable identifier found
-                        if ($this->stream->is(array(Script::FUNCTION_IDENTIFIER, Script::VARIABLE_IDENTIFIER))) {
+                        if ($this->stream->is([Script::FUNCTION_IDENTIFIER, Script::VARIABLE_IDENTIFIER])) {
                             $next = false;
                             $this->stream->prev();
                         } else {
@@ -317,7 +310,6 @@ class Tokenizer
                 }
                 break;
         }
-
         return $next;
     }
 
@@ -333,17 +325,14 @@ class Tokenizer
             if (null !== $this->quote) {
                 if ($this->stream->is($this->quote)) {
                     $this->log(sprintf("Got quote '%s' at %d", $this->quote, $this->stream->getPos()));
-
                     return true;
                 }
-            } else if ($this->stream->is(array(Script::FUNCTION_PARAM_END, Script::PARAM_SEPARATOR))) {
+            } else if ($this->stream->is([Script::FUNCTION_PARAM_END, Script::PARAM_SEPARATOR])) {
                 $this->log(sprintf("Got parameter end '%s' at %d", $this->stream->getChar(), $this->stream->getPos()));
                 $this->stream->prev();
-                
                 return true;
             }
         }
-
         return false;
     }
 
@@ -395,7 +384,6 @@ class Tokenizer
             }
         }
         $this->log(sprintf("Read parameter end for '%s'", $this->data));
-
         return $valid;
     }
 
@@ -415,7 +403,6 @@ class Tokenizer
             return false;
         }
         $this->data .= $this->stream->getChar();
-
         return true;
     }
 

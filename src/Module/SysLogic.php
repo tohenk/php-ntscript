@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -43,23 +43,18 @@ class SysLogic extends Module
             case 'eq':
             case '=':
                 return Script::asBool($expr1 == $expr2);
-
             case 'neq':
             case '<>':
                 return Script::asBool($expr1 != $expr2);
-
             case 'leq':
             case '<=':
                 return Script::asBool($expr1 <= $expr2);
-
             case 'geq':
             case '>=':
                 return Script::asBool($expr1 >= $expr2);
-
             case 'ls':
             case '<':
                 return Script::asBool($expr1 < $expr2);
-
             case 'gr':
             case '>':
                 return Script::asBool($expr1 > $expr2);
@@ -201,7 +196,6 @@ class SysLogic extends Module
                 break;
             }
         }
-
         return Script::asBool($state);
     }
 
@@ -225,7 +219,6 @@ class SysLogic extends Module
                 break;
             }
         }
-
         return Script::asBool($state);
     }
 

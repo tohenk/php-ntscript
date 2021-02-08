@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -43,7 +43,6 @@ class ObjectContext implements ContextInterface
         if (null === self::$instance) {
             self::$instance = new self();
         }
-
         return self::$instance;
     }
 
@@ -63,7 +62,7 @@ class ObjectContext implements ContextInterface
     public function getMethod($context, $name)
     {
         if ($this->canHandle($context)) {
-            return array($context, 'get'.$name);
+            return [$context, 'get'.$name];
         }
     }
 
@@ -74,7 +73,7 @@ class ObjectContext implements ContextInterface
     public function setMethod($context, $name)
     {
         if ($this->canHandle($context)) {
-            return array($context, 'set'.$name);
+            return [$context, 'set'.$name];
         }
     }
 
@@ -85,7 +84,7 @@ class ObjectContext implements ContextInterface
     public function getKeyValuePair($context)
     {
         if (method_exists($context, 'getId')) {
-            return array($context->getId(), (string) $context);
+            return [$context->getId(), (string) $context];
         }
     }
 

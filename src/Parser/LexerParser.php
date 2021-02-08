@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -41,7 +41,6 @@ class LexerParser extends Parser
         if ($this->token = $tokenizer->tokenize($script)) {
             $this->token->collectVars($this->variables);
         }
-
         unset($tokenizer);
     }
 }

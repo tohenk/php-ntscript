@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -58,7 +58,6 @@ class SystemProvider implements ProviderInterface
         if (null === self::$instance) {
             self::$instance = new self();
         }
-
         return self::$instance;
     }
 
@@ -67,7 +66,7 @@ class SystemProvider implements ProviderInterface
      */
     public function __construct()
     {
-        $this->modules = array(
+        $this->modules = [
             new SysCore(),
             new SysLogic(),
             new SysStack(),
@@ -77,7 +76,7 @@ class SystemProvider implements ProviderInterface
             new SysArray(),
             new SysCounter(),
             new SysContext(),
-        );
+        ];
     }
 
     /**

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -105,7 +105,6 @@ class Module
                 $value = $value->format(\DateTime::ISO8601);
             }
         }
-
         return $value;
     }
 
@@ -148,7 +147,6 @@ class Module
     public function setManager($manager)
     {
         $this->manager = $manager;
-
         return $this;
     }
 
@@ -171,7 +169,6 @@ class Module
     public function setScript(Script $script)
     {
         $this->script = $script;
-
         return $this;
     }
 
@@ -195,9 +192,7 @@ class Module
                 // function name and alias
                 $funcs = explode(' ', $tags[0]['data']);
                 $fname = array_shift($funcs);
-                $parameters = array(
-                    'name' => $fname
-                );
+                $parameters = ['name' => $fname];
                 if (count($funcs)) {
                     $parameters['alias'] = $funcs[0];
                 }
@@ -205,7 +200,7 @@ class Module
                 $parameters['description'] = $docBlock->getRawDescription();
                 // function syntax and parameter
                 $cnt = 0;
-                $syntax = array();
+                $syntax = [];
                 foreach ($method->getParameters() as $param) {
                     if (!$param->isOptional()) {
                         $cnt++;
@@ -235,13 +230,11 @@ class Module
                     $parameters['logic'] = true;
                 }
                 // function handler
-                $parameters['method'] = array($this, $method->getName());
-
+                $parameters['method'] = [$this, $method->getName()];
                 $func = new Func($this, $parameters);
                 $this->getManager()->add($func);
             }
         }
-
         return $this;
     }
 }

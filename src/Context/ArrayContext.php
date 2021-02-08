@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -31,12 +31,12 @@ class ArrayContext implements ContextInterface
     /**
      * @var array
      */
-    protected $contexes = array();
+    protected $contexes = [];
 
     /**
      * @var \NTLAB\Script\Context\ArrayVar[]
      */
-    protected $caches = array();
+    protected $caches = [];
 
     /**
      * @var \NTLAB\Script\Context\ArrayContext
@@ -53,7 +53,6 @@ class ArrayContext implements ContextInterface
         if (null === self::$instance) {
             self::$instance = new self();
         }
-
         return self::$instance;
     }
 
@@ -73,7 +72,7 @@ class ArrayContext implements ContextInterface
     public function getMethod($context, $name)
     {
         if ($this->canHandle($context) && $cache = $this->getCache($context)) {
-            return array($cache, 'get'.$name);
+            return [$cache, 'get'.$name];
         }
     }
 
@@ -112,7 +111,7 @@ class ArrayContext implements ContextInterface
         $vars = $context instanceof ArrayVar ? $context->getVars() : $context;
         if (count($keys = array_keys($vars))) {
             $key = array_shift($keys);
-            $values = array();
+            $values = [];
             if (empty($keys)) {
                 $values[] = $vars[$key];
             } else {
@@ -120,8 +119,7 @@ class ArrayContext implements ContextInterface
                     $values[] = $vars[$k];
                 }
             }
-
-            return array($vars[$key], implode(' - ', $values));
+            return [$vars[$key], implode(' - ', $values)];
         }
     }
 

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -40,7 +40,7 @@ class SysArray extends Module
     /**
      * @var array
      */
-    protected static $list = array();
+    protected static $list = [];
 
     /**
      * Process objects member and evaluate the script.
@@ -77,7 +77,7 @@ class SysArray extends Module
      */
     public function f_LCreate($name)
     {
-        self::$list[$name] = array();
+        self::$list[$name] = [];
     }
 
     /**
@@ -122,7 +122,6 @@ class SysArray extends Module
         if (isset(self::$list[$name])) {
             return count(self::$list[$name]);
         }
-
         return 0;
     }
 }

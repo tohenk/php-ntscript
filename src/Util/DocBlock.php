@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -49,7 +49,7 @@ class DocBlock
     /**
      * @var array
      */
-    protected $tags = array();
+    protected $tags = [];
 
     /**
      * Constructor.
@@ -70,12 +70,12 @@ class DocBlock
      */
     protected function clean($str)
     {
-        $lines = array();
+        $lines = [];
         foreach (explode("\n", $str) as $line) {
             // clean leading space and eol
             $line = rtrim(ltrim($line), "\r");
             // ignore opening and ending
-            if (in_array($line, array('/**', '*/'))) {
+            if (in_array($line, ['/**', '*/'])) {
                 continue;
             }
             // only process line begin with *
@@ -88,14 +88,13 @@ class DocBlock
                 $lines[] = $line;
             }
         }
-
         return implode("\n", $lines);
     }
 
     protected function parse()
     {
         $this->description = null;
-        $this->tags = array();
+        $this->tags = [];
         if ($this->content) {
             $lines = explode("\n", $this->content);
             $parsing = static::PARSE_DESC;
@@ -108,14 +107,12 @@ class DocBlock
                         $this->parseDesc($lines);
                         $parsing = static::PARSE_TAGS;
                         break;
-
                     case static::PARSE_TAGS:
                         $this->parseTags($lines);
                         break;
                 }
             }
         }
-
         return $this;
     }
 
@@ -124,10 +121,10 @@ class DocBlock
      *
      * @param array $lines  Comment lines
      */
-    protected function parseDesc(&$lines = array())
+    protected function parseDesc(&$lines = [])
     {
-        $result = array();
-        $raw = array();
+        $result = [];
+        $raw = [];
         $str = null;
         while (true) {
             if ($this->isEof($lines) || $this->isTag($lines[0])) {
@@ -165,7 +162,6 @@ class DocBlock
         }
         $this->description = implode("\n", $result);
         $this->rawDescription = rtrim(implode("\n", $raw));
-
         return $this;
     }
 
@@ -174,7 +170,7 @@ class DocBlock
      *
      * @param array $lines  Comment lines
      */
-    protected function parseTags(&$lines = array())
+    protected function parseTags(&$lines = [])
     {
         while (true) {
             if ($this->isEof($lines)) {
@@ -204,13 +200,12 @@ class DocBlock
                 $tags = explode(" ", str_replace("\t", " ", $tag), 2);
                 $tagName = array_shift($tags);
                 $tagData = implode(" ", $tags);
-                $this->tags[] = array(
+                $this->tags[] = [
                     'name'  => $tagName,
                     'data'  => $tagData,
-                );
+                ];
             }
         }
-
         return $this;
     }
 
@@ -299,7 +294,7 @@ class DocBlock
      */
     public function getNamedTags($name)
     {
-        $tags = array();
+        $tags = [];
         if ('@' !== substr($name, 0, 1)) {
             $name = '@'.$name;
         }
@@ -308,7 +303,6 @@ class DocBlock
                 $tags[] = $tag;
             }
         }
-
         return $tags;
     }
 
@@ -352,11 +346,11 @@ class DocBlock
         }
         // check mandatory variable name
         if ('$' === substr($pName, 0, 1)) {
-            return array(
+            return [
                 'name' => substr($pName, 1),
                 'type' => $pType,
                 'desc' => $param,
-            );
+            ];
         }
     }
 
@@ -377,7 +371,6 @@ class DocBlock
             $result = $str;
             $str = null;
         }
-
         return $result;
     }
 

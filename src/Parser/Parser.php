@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -36,7 +36,7 @@ abstract class Parser
     /**
      * @var array
      */
-    protected $variables = array();
+    protected $variables = [];
 
     /**
      * Parse a script and extract functions and/or variables.
@@ -50,9 +50,8 @@ abstract class Parser
     public function parse($expr)
     {
         $this->token = null;
-        $this->variables = array();
+        $this->variables = [];
         $this->doParse($expr);
-
         return $this;
     }
 
@@ -73,11 +72,10 @@ abstract class Parser
      */
     public function getFunctions()
     {
-        $functions = array();
+        $functions = [];
         if ($this->token) {
             $this->token->collectFunctions($functions);
         }
-
         return $functions;
     }
 
@@ -105,6 +103,6 @@ abstract class Parser
      */
     public function getInfos()
     {
-        return array();
+        return [];
     }
 }

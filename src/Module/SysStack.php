@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -37,7 +37,7 @@ use NTLAB\Script\Core\Script;
  */
 class SysStack extends Module
 {
-    protected $stacks = array();
+    protected $stacks = [];
 
     /**
      * Clear stacks.
@@ -46,7 +46,7 @@ class SysStack extends Module
      */
     public function f_StackClear()
     {
-        $this->stacks = array();
+        $this->stacks = [];
     }
 
     /**

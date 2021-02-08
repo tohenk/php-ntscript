@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -62,7 +62,6 @@ class SysString extends Module
             }
             $value .= $part;
         }
-
         return $value;
     }
 
@@ -163,7 +162,6 @@ class SysString extends Module
                 $value .= $this->expectString($arg);
             }
         }
-
         return $value;
     }
 
@@ -183,7 +181,6 @@ class SysString extends Module
         foreach ($args as $arg) {
             $value .= $this->expectString($arg);
         }
-
         return $value;
     }
 
@@ -200,8 +197,7 @@ class SysString extends Module
     {
         $args = func_get_args();
         array_unshift($args, ' ');
-
-        return call_user_func_array(array($this, 'f_ConcatWith'), $args);
+        return call_user_func_array([$this, 'f_ConcatWith'], $args);
     }
 
     /**
@@ -303,7 +299,6 @@ class SysString extends Module
     public function f_SplitDelimeter($s, $delim, $element)
     {
         $array = explode($this->expectString($delim), $this->expectString($s));
-
         return isset($array[$element]) ? $array[$element] : null;
     }
 

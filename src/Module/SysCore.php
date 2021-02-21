@@ -100,6 +100,7 @@ class SysCore extends Module
             }
             $result = eval($expr);
         } catch (\Exception $e) {
+            error_log($e);
             $result = null;
         }
         return $result;

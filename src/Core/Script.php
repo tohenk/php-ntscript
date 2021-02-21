@@ -244,6 +244,7 @@ class Script
                     return $context->$method();
                 }
             } catch (\Exception $e) {
+                error_log($e);
             }
         }
     }
@@ -290,6 +291,7 @@ class Script
                     }
                     return true;
                 } catch (\Exception $e) {
+                    error_log($e);
                 }
             }
         }

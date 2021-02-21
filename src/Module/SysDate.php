@@ -94,6 +94,7 @@ class SysDate extends Module
                 return $date->format('Y-m-d');
             }
         } catch (\Exception $e) {
+            error_log($e);
         }
     }
 
@@ -113,6 +114,7 @@ class SysDate extends Module
                 return $date->format('Y-m-d');
             }
         } catch (\Exception $e) {
+            error_log($e);
         }
     }
 

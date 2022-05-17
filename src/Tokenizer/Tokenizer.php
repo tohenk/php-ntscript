@@ -192,7 +192,7 @@ class Tokenizer
                 case $this->stream->is(Script::FUNCTION_IDENTIFIER):
                     $token = Token::TOK_FUNCTION;
                     break;
-                case static::TOKENIZE_PARAMETER === $this->tok && $this->stream->is(array(Script::PARAM_QUOTE, Script::PARAM_QUOTE_SINGLE)):
+                case static::TOKENIZE_PARAMETER === $this->tok && $this->stream->is([Script::PARAM_QUOTE, Script::PARAM_QUOTE_SINGLE]):
                     // is this first occurance of quote?
                     if (null === $this->quote) {
                         $this->quote = $this->stream->getChar();
@@ -396,10 +396,10 @@ class Tokenizer
     protected function isValid($allow = null)
     {
         // digits are not allowed in indentifier as prefix
-        if (0 == strlen($this->data) && $this->stream->isDigit()) {
+        if (0 === strlen((string) $this->data) && $this->stream->isDigit()) {
             return false;
         }
-        if (false === strpos($allow, $this->stream->getChar()) && !preg_match('/[a-zA-Z0-9\_]/', $this->stream->getChar())) {
+        if (false === strpos((string) $allow, $this->stream->getChar()) && !preg_match('/[a-zA-Z0-9\_]/', $this->stream->getChar())) {
             return false;
         }
         $this->data .= $this->stream->getChar();

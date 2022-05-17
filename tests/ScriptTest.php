@@ -16,18 +16,18 @@ class ScriptTest extends BaseTest
      */
     protected $script;
 
-    protected $modules = array(
-        'system.array'    => array('each', 'lcreate', 'ladd', 'lconcat'),
-        'system.context'  => array('recno', 'reccnt'),
-        'system.core'     => array('func', 'var', 'null', 'eval', 'const'),
-        'system.counter'  => array('cget', 'cset', 'creset', 'cinc', 'cdec', 'series'),
-        'system.date'     => array('fmtdate', 'dtafter', 'dtbefore', 'dtpart', 'time'),
-        'system.logic'    => array('if', 'cmp', 'eq', 'neq', 'leq', 'geq', 'ls', 'gr', 'and', 'or', 'not'),
-        'system.math'     => array('sum', 'sub', 'mul', 'div', 'mod', 'inc', 'dec', 'int', 'numonly'),
-        'system.stack'    => array('sclr', 'sexist', 'spush', 'spop'),
-        'system.string'   => array('split', 'ucfirst', 'ucwords', 'upper', 'lower', 'trim', 'concat', 'concatw', 'concatall', 'spaceconcat', 'repeat', 'pos', 'strpos', 'len', 'ch', 'space', 'crlf', 'splitdel', 'left', 'right', 'substr', 'p', 'q', 'empty', 'notempty'),
-        'test.core'       => array('callme', 'callres', 'test'),
-    );
+    protected $modules = [
+        'system.array'    => ['each', 'lcreate', 'ladd', 'lconcat'],
+        'system.context'  => ['recno', 'reccnt'],
+        'system.core'     => ['func', 'var', 'null', 'eval', 'const'],
+        'system.counter'  => ['cget', 'cset', 'creset', 'cinc', 'cdec', 'series'],
+        'system.date'     => ['fmtdate', 'dtafter', 'dtbefore', 'dtpart', 'time'],
+        'system.logic'    => ['if', 'cmp', 'eq', 'neq', 'leq', 'geq', 'ls', 'gr', 'and', 'or', 'not'],
+        'system.math'     => ['sum', 'sub', 'mul', 'div', 'mod', 'inc', 'dec', 'int', 'numonly'],
+        'system.stack'    => ['sclr', 'sexist', 'spush', 'spop'],
+        'system.string'   => ['split', 'ucfirst', 'ucwords', 'upper', 'lower', 'trim', 'concat', 'concatw', 'concatall', 'spaceconcat', 'repeat', 'pos', 'strpos', 'len', 'ch', 'space', 'crlf', 'splitdel', 'left', 'right', 'substr', 'p', 'q', 'empty', 'notempty'],
+        'test.core'       => ['callme', 'callres', 'test'],
+    ];
 
     protected function setUp(): void
     {
@@ -77,7 +77,7 @@ class ScriptTest extends BaseTest
 
     public function testContext()
     {
-        $array = array('var' => 'something', 'Var2' => new TestContext2(), 'VAR3' => 'VAR3');
+        $array = ['var' => 'something', 'Var2' => new TestContext2(), 'VAR3' => 'VAR3'];
         $this->script->setContext($array);
         $this->assertContext();
         $this->script->setContext(new TestContext());
@@ -120,11 +120,11 @@ EOF
     {
         $counter = 0;
         $this->script
-            ->setObjects(array(
+            ->setObjects([
                 new TestContext2('A1'),
                 new TestContext2('A2'),
                 new TestContext2('A3'),
-            ))
+            ])
             ->each(function(Script $script, ScriptTest $_this) use (&$counter) {
                 $counter++;
                 $_this->assertEquals($counter, $script->evaluate('#recno()'), sprintf('Record number #%d', $counter));
@@ -143,11 +143,11 @@ class TestContext
     public function __construct()
     {
         $this->var2 = new TestContext2();
-        $this->var4 = array(
+        $this->var4 = [
             new TestContext2('X1'),
             new TestContext2('X2'),
             new TestContext2('X3'),
-        );
+        ];
         $this->var5 = new \ArrayObject();
         $this->var5->append(new TestContext2('X1'));
         $this->var5->append(new TestContext2('X2'));
@@ -187,10 +187,10 @@ class TestContext2 extends ArrayVar
     public function __construct($var = null)
     {
         $this->var = $var;
-        parent::__construct(array(
+        parent::__construct([
             'test1' => 'TEST1',
             'TEST2' => 'TEST2',
-        ));
+        ]);
     }
 
     public function getTest()
@@ -212,7 +212,7 @@ class TestContext2 extends ArrayVar
  */
 class TestModule extends Module
 {
-    protected $calls = array();
+    protected $calls = [];
 
     /**
      * Call me function.

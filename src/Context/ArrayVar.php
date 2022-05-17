@@ -66,17 +66,17 @@ class ArrayVar implements \ArrayAccess, \IteratorAggregate, \Countable
         return $this;
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->vars);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->vars[$offset];
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (null === $offset) {
             $this->vars[] = $value;
@@ -85,17 +85,17 @@ class ArrayVar implements \ArrayAccess, \IteratorAggregate, \Countable
         }
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->vars[$offset]);
     }
 
-    public function getIterator()
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->vars);
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->vars);
     }

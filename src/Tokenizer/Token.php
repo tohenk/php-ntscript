@@ -230,54 +230,54 @@ class Token implements \ArrayAccess, \Iterator, \Countable
         }
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->children[$offset]);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->children[$offset];
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->children[$offset] = $value;
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->children[$offset]);
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->children);
         $this->count = count($this->children);
     }
 
-    public function key()
+    public function key(): mixed
     {
         return key($this->children);
     }
 
-    public function current()
+    public function current(): mixed
     {
         return current($this->children);
     }
 
-    public function next()
+    public function next(): void
     {
         next($this->children);
         $this->count--;
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return $this->count > 0;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->children);
     }

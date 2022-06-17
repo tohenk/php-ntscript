@@ -47,7 +47,7 @@ class SysDate extends Module
         if ($date instanceof \DateTime) {
             return $date;
         }
-        if (strlen($date)) {
+        if (strlen((string) $date)) {
             $time = null;
             // check if date is a timestamp
             if (is_numeric($date)) {
@@ -90,6 +90,7 @@ class SysDate extends Module
     {
         try {
             if ($date = $this->getDate($date)) {
+                $date = clone $date;
                 $date->modify(sprintf('+%d day', (int) $days));
                 return $date->format('Y-m-d');
             }
@@ -110,6 +111,7 @@ class SysDate extends Module
     {
         try {
             if ($date = $this->getDate($date)) {
+                $date = clone $date;
                 $date->modify(sprintf('-%d day', (int) $days));
                 return $date->format('Y-m-d');
             }

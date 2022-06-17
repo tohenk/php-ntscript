@@ -105,7 +105,7 @@ class Module
                 $value = $value->format(\DateTime::ISO8601);
             }
         }
-        return $value;
+        return (string) $value;
     }
 
     /**

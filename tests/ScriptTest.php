@@ -58,14 +58,15 @@ class ScriptTest extends BaseTest
         $this->assertFalse($this->script->getManager()->has('somefunc2'), 'Function alias not added if target function doesn\'t exist');
     }
 
-    protected function assertContext()
+    protected function assertContext($context)
     {
+        $this->script->setContext($context);
         $this->assertEquals('something', $this->script->evaluate('$var'), '->evaluate() proper replace variable');
         $this->assertEquals('VAR3', $this->script->evaluate('$VAR3'), '->evaluate() proper replace uppercased variable');
         $this->assertEquals('something', $this->script->evaluate('$var2.test'), '->evaluate() proper replace variable with context');
         $this->assertEquals('TEST1', $this->script->evaluate('$var2.test1'), '->evaluate() proper replace variable with __call()');
         $this->assertEquals('TEST2', $this->script->evaluate('$var2.TEST2'), '->evaluate() proper replace uppercased variable with __call()');
-        $this->assertEquals(null, $this->script->evaluate('$var2.notexist'), '->evaluate() proper replace variable with __call() with exception');
+        $this->assertEquals(null, $this->script->evaluate('$notexist'), '->evaluate() proper replace variable which may throw exception');
     }
 
     public function testNonScript()
@@ -75,13 +76,14 @@ class ScriptTest extends BaseTest
         $this->assertEquals('this text is indeed not long.', $this->script->evaluate('this text is indeed not long.'), '->evaluate() proper evaluate non script');
     }
 
-    public function testContext()
+    public function testArrayContext()
     {
-        $array = ['var' => 'something', 'Var2' => new TestContext2(), 'VAR3' => 'VAR3'];
-        $this->script->setContext($array);
-        $this->assertContext();
-        $this->script->setContext(new TestContext());
-        $this->assertContext();
+        $this->assertContext(['var' => 'something', 'Var2' => new TestContext2(), 'VAR3' => 'VAR3']);
+    }
+
+    public function testObjectContext()
+    {
+        $this->assertContext(new TestContext());
     }
 
     public function testScript()

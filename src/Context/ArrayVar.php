@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -114,7 +114,7 @@ class ArrayVar implements \ArrayAccess, \IteratorAggregate, \Countable
             }
         }
         if (null === $var) {
-            throw new \InvalidArgumentException(sprintf('Unknown method %s::%s.', __CLASS__, $method));
+            throw new \BadMethodCallException(sprintf('Non existent key %s!', $method));
         }
         $value = $this->vars[$var];
         return $value;

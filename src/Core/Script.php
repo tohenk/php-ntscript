@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -32,15 +32,15 @@ use NTLAB\Script\Tokenizer\Token;
 
 class Script
 {
-    const FUNCTION_IDENTIFIER = '#';
-    const FUNCTION_PARAM_START = '(';
-    const FUNCTION_PARAM_END = ')';
-    const VARIABLE_IDENTIFIER = '$';
-    const VARIABLE_SEPARATOR = '.';
-    const PARAM_SEPARATOR = ',';
-    const PARAM_QUOTE = '"';
-    const PARAM_QUOTE_SINGLE = '\'';
-    const STATEMENT_DELIMETER = ';';
+    public const FUNCTION_IDENTIFIER = '#';
+    public const FUNCTION_PARAM_START = '(';
+    public const FUNCTION_PARAM_END = ')';
+    public const VARIABLE_IDENTIFIER = '$';
+    public const VARIABLE_SEPARATOR = '.';
+    public const PARAM_SEPARATOR = ',';
+    public const PARAM_QUOTE = '"';
+    public const PARAM_QUOTE_SINGLE = '\'';
+    public const STATEMENT_DELIMETER = ';';
 
     /**
      * @var \NTLAB\Script\Core\Manager
@@ -236,18 +236,9 @@ class Script
      */
     public function getVarValue($context, $name)
     {
-        if ($method = $this->getVarMethod($context, $name)) {
-            try {
-                if (is_callable($method)) {
-                    return call_user_func($method);
-                } else {
-                    return $context->$method();
-                }
-            } catch (\Exception $e) {
-                if (!$e instanceof \BadMethodCallException) {
-                    error_log($e);
-                }
-            }
+        list($success, $value) = $this->tryGetVar($context, $name);
+        if ($success) {
+            return $value;
         }
     }
 
@@ -273,6 +264,48 @@ class Script
     }
 
     /**
+     * Try to get variable value.
+     *
+     * @param mixed $context  The object context
+     * @param string $name  The variable name
+     * @return array
+     */
+    protected function tryGetVar($context, $name)
+    {
+        $success = false;
+        $value = null;
+        if ($method = $this->getVarMethod($context, $name)) {
+            try {
+                if (is_callable($method)) {
+                    // context is providing __call()
+                    $value = call_user_func($method);
+                    $success = true;
+                } elseif (is_array($method) && count($method) === 2 && is_object($method[0])) {
+                    // iterate methods of context to find match
+                    $r = new \ReflectionClass($method[0]);
+                    foreach ($r->getMethods(\ReflectionMethod::IS_PUBLIC) as $m) {
+                        if (strtolower($method[1]) === strtolower($m->name)) {
+                            $mm = $m->name;
+                            $value = $method[0]->$mm();
+                            $success = true;
+                            break;
+                        }
+                    }
+                } elseif (is_string($method)) {
+                    // match method name
+                    $value = $context->$method();
+                    $success = true;
+                }
+            } catch (\Exception $e) {
+                if (!$e instanceof \BadMethodCallException) {
+                    error_log($e);
+                }
+            }
+        }
+        return [$success, $value];
+    }
+
+    /**
      * Get variable value.
      *
      * @param mixed $var  The variable return value
@@ -284,19 +317,10 @@ class Script
     {
         $this->getVarContext($context, $name);
         if ($context) {
-            if ($method = $this->getVarMethod($context, $name)) {
-                try {
-                    if (is_callable($method)) {
-                        $var = call_user_func($method);
-                    } else {
-                        $var = $context->$method();
-                    }
-                    return true;
-                } catch (\Exception $e) {
-                    if (!$e instanceof \BadMethodCallException) {
-                        error_log($e);
-                    }
-                }
+            list($success, $value) = $this->tryGetVar($context, $name);
+            if ($success) {
+                $var = $value;
+                return true;
             }
         }
         return false;

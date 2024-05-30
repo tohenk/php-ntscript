@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -26,7 +26,7 @@
 
 namespace NTLAB\Script\Context;
 
-class ObjectContext implements ContextInterface
+class ObjectContext extends Context implements ContextInterface
 {
     /**
      * @var \NTLAB\Script\Context\ObjectContext
@@ -61,7 +61,7 @@ class ObjectContext implements ContextInterface
      */
     public function getMethod($context, $name)
     {
-        if ($this->canHandle($context)) {
+        if ($this->canHandle($context) && $this->isVar($name)) {
             return [$context, 'get'.$name];
         }
     }
@@ -72,7 +72,7 @@ class ObjectContext implements ContextInterface
      */
     public function setMethod($context, $name)
     {
-        if ($this->canHandle($context)) {
+        if ($this->canHandle($context) && $this->isVar($name)) {
             return [$context, 'set'.$name];
         }
     }

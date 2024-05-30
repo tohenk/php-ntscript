@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -28,11 +28,11 @@ namespace NTLAB\Script\Tokenizer;
 
 class Token implements \ArrayAccess, \Iterator, \Countable
 {
-    const TOK_INVALID = 0;
-    const TOK_GROUP = 1;
-    const TOK_TEXT = 2;
-    const TOK_FUNCTION = 3;
-    const TOK_VARIABLE = 4;
+    public const TOK_INVALID = 0;
+    public const TOK_GROUP = 1;
+    public const TOK_TEXT = 2;
+    public const TOK_FUNCTION = 3;
+    public const TOK_VARIABLE = 4;
 
     /**
      * @var int

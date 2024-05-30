@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -31,8 +31,8 @@ use NTLAB\Script\Stream\Stream;
 
 class Tokenizer
 {
-    const TOKENIZE_SCRIPT = 1;
-    const TOKENIZE_PARAMETER = 2;
+    public const TOKENIZE_SCRIPT = 1;
+    public const TOKENIZE_PARAMETER = 2;
 
     /**
      * @var int

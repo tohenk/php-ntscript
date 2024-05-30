@@ -26,53 +26,18 @@
 
 namespace NTLAB\Script\Context;
 
-use NTLAB\Script\Core\Script;
-
-class Stack
+class Context
 {
-    /**
-     * @var \NTLAB\Script\Core\Script
-     */
-    protected $script;
+    public const PATTERN = '#^(?![0-9]+)([a-zA-Z0-9_]+)$#';
 
     /**
-     * @var array
-     */
-    protected $objects;
-
-    /**
-     * @var int
-     */
-    protected $position;
-
-    /**
-     * @var mixed
-     */
-    protected $current;
-
-    /**
-     * Constructor.
+     * Check if name is valid variable name.
      *
-     * @param \NTLAB\Script\Core\Script $script  Script object
+     * @param string $name
+     * @return bool
      */
-    public function __construct(Script $script)
+    public function isVar($name)
     {
-        $this->script = $script;
-        $this->objects = $this->script->getIterator()->getObjects();
-        $this->position = $this->script->getIterator()->getRecNo();
-        $this->current = $this->script->getContext();
-    }
-
-    /**
-     * Restore context.
-     *
-     * @return \NTLAB\Script\Context\Stack
-     */
-    public function restore()
-    {
-        $this->script->getIterator()->setObjects($this->objects);
-        $this->script->getIterator()->setRecNo($this->position);
-        $this->script->setContext($this->current);
-        return $this;
+        return preg_match(static::PATTERN, $name, $matches) ? true : false;
     }
 }

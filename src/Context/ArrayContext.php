@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -26,7 +26,7 @@
 
 namespace NTLAB\Script\Context;
 
-class ArrayContext implements ContextInterface
+class ArrayContext extends Context implements ContextInterface
 {
     /**
      * @var array
@@ -71,7 +71,7 @@ class ArrayContext implements ContextInterface
      */
     public function getMethod($context, $name)
     {
-        if ($this->canHandle($context) && $cache = $this->getCache($context)) {
+        if ($this->canHandle($context) && $this->isVar($name) && $cache = $this->getCache($context)) {
             return [$cache, 'get'.$name];
         }
     }

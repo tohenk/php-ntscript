@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -45,11 +45,11 @@ Manager::addContext(ObjectContext::getInstance(), Manager::CONTEXT_PRIO_LOW);
 
 class Manager
 {
-    const VERSION = '1.0.0';
+    public const VERSION = '1.0.0';
 
-    const CONTEXT_PRIO_HIGH = 'HIGH';
-    const CONTEXT_PRIO_NORMAL = 'NORMAL';
-    const CONTEXT_PRIO_LOW = 'LOW';
+    public const CONTEXT_PRIO_HIGH = 'HIGH';
+    public const CONTEXT_PRIO_NORMAL = 'NORMAL';
+    public const CONTEXT_PRIO_LOW = 'LOW';
 
     /**
      * @var \NTLAB\Script\Core\Manager
@@ -67,7 +67,7 @@ class Manager
     protected static $listeners = [];
 
     /**
-     * @var \NTLAB\Script\Context\ContextInterface[]
+     * @var array
      */
     protected static $contexes = [
         self::CONTEXT_PRIO_HIGH => [],

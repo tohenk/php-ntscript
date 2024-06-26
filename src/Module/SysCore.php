@@ -51,9 +51,7 @@ class SysCore extends Module
      */
     public function f_Func()
     {
-        $parameters = func_get_args();
-        $func = array_shift($parameters);
-        return Script::FUNCTION_IDENTIFIER.$func.Script::FUNCTION_PARAM_START.implode(Script::PARAM_SEPARATOR, $parameters).Script::FUNCTION_PARAM_END;
+        return Script::asFunc(...func_get_args());
     }
 
     /**

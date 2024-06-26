@@ -489,4 +489,16 @@ class Script
     {
         return $value ? 1 : 0;
     }
+
+    /**
+     * Create a script function.
+     *
+     * @return string
+     */
+    public static function asFunc()
+    {
+        $parameters = func_get_args();
+        $func = array_shift($parameters);
+        return static::FUNCTION_IDENTIFIER.$func.static::FUNCTION_PARAM_START.implode(static::PARAM_SEPARATOR, $parameters).static::FUNCTION_PARAM_END;
+    }
 }

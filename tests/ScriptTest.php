@@ -1,5 +1,29 @@
 <?php
 
+/*
+ * The MIT License
+ *
+ * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 namespace NTLAB\Script\Test;
 
 use NTLAB\Script\Context\ArrayVar;
@@ -22,7 +46,7 @@ class ScriptTest extends BaseTest
         'system.core'     => ['func', 'var', 'null', 'eval', 'const'],
         'system.counter'  => ['cget', 'cset', 'creset', 'cinc', 'cdec', 'series'],
         'system.date'     => ['fmtdate', 'dtafter', 'dtbefore', 'dtpart', 'time'],
-        'system.logic'    => ['if', 'cmp', 'eq', 'neq', 'leq', 'geq', 'ls', 'gr', 'and', 'or', 'not'],
+        'system.logic'    => ['if', 'cmp', 'eq', 'neq', 'leq', 'geq', 'ls', 'gr', 'and', 'or', 'not', 'isnull'],
         'system.math'     => ['sum', 'sub', 'mul', 'div', 'mod', 'inc', 'dec', 'int', 'numonly'],
         'system.stack'    => ['sclr', 'sexist', 'spush', 'spop'],
         'system.string'   => ['split', 'ucfirst', 'ucwords', 'upper', 'lower', 'trim', 'concat', 'concatw', 'concatall', 'spaceconcat', 'repeat', 'pos', 'strpos', 'len', 'ch', 'space', 'crlf', 'splitdel', 'left', 'right', 'substr', 'p', 'q', 'empty', 'notempty'],
@@ -104,6 +128,7 @@ class ScriptTest extends BaseTest
         $this->assertEquals(null, $this->script->evaluate('#if(0,"ME")'), '->evaluate() proper parse if when false with optional value');
         $this->assertEquals('YES', $this->script->evaluate('#if(#gr(2,1),"YES")'), '->evaluate() proper parse if when condition is function');
         $this->assertEquals('9 test: something', $this->script->evaluate('#if(1,"#len($var) test: $var")'), '->evaluate() proper parse if with special chars');
+        $this->assertEquals('1', $this->script->evaluate('#isnull(#null())'), '->evaluate() proper check for null');
 
         $this->assertEquals('X1, X2, X3', $this->script->evaluate('#lcreate(x);#each($var5,"#func(ladd,x,#var(var))");#lconcat(x,", ")'), '->evaluate() proper process each and list');
 

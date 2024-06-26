@@ -233,4 +233,16 @@ class SysLogic extends Module
     {
         return Script::asBool(!((bool) $cond));
     }
+
+    /**
+     * Evaluate if expression is null.
+     *
+     * @param string $expr  Expression
+     * @return int
+     * @func isnull
+     */
+    public function f_IsNull($expr)
+    {
+        return Script::asBool(null === $expr);
+    }
 }

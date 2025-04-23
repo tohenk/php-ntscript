@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -58,6 +58,7 @@ class SysDate extends Module
             if (null !== $time) {
                 $dt = new \DateTime();
                 $dt->setTimestamp($time);
+
                 return $dt;
             }
         }
@@ -92,6 +93,7 @@ class SysDate extends Module
             if ($date = $this->getDate($date)) {
                 $date = clone $date;
                 $date->modify(sprintf('+%d day', (int) $days));
+
                 return $date->format('Y-m-d');
             }
         } catch (\Exception $e) {
@@ -113,6 +115,7 @@ class SysDate extends Module
             if ($date = $this->getDate($date)) {
                 $date = clone $date;
                 $date->modify(sprintf('-%d day', (int) $days));
+
                 return $date->format('Y-m-d');
             }
         } catch (\Exception $e) {

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -36,7 +36,17 @@ class ContextIterator
     /**
      * @var int
      */
+    protected $start;
+
+    /**
+     * @var int
+     */
     protected $recno;
+
+    /**
+     * @var int
+     */
+    protected $reccount;
 
     /**
      * Get objects.
@@ -56,7 +66,16 @@ class ContextIterator
      */
     public function setObjects($objects)
     {
-        $this->objects = $objects;
+        if ($objects instanceof PartialObject) {
+            $this->objects = $objects->getObjects();
+            $this->start = $objects->getPosition();
+            $this->reccount = $objects->getCount();
+        } else {
+            $this->objects = $objects;
+            $this->start = 0;
+            $this->reccount = count($this->objects);
+        }
+
         return $this;
     }
 
@@ -69,6 +88,7 @@ class ContextIterator
     public function setRecNo($recno)
     {
         $this->recno = $recno;
+
         return $this;
     }
 
@@ -89,6 +109,16 @@ class ContextIterator
      */
     public function getRecCount()
     {
-        return count($this->objects);
+        return $this->reccount;
+    }
+
+    /**
+     * Get start index.
+     *
+     * @return int
+     */
+    public function getStart()
+    {
+        return $this->start;
     }
 }

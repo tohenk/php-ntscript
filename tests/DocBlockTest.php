@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -26,9 +26,10 @@
 
 namespace NTLAB\Script\Test;
 
+use PHPUnit\Framework\TestCase;
 use NTLAB\Script\Util\DocBlock;
 
-class DocBlockTest extends BaseTest
+class DocBlockTest extends TestCase
 {
     /**
      * @var \ReflectionClass
@@ -60,7 +61,7 @@ class DocBlockTest extends BaseTest
      * @param string $tag  Test tag
      *                     which can be written as multiline
      * @return void nothing
-     * @other Testing 
+     * @other Testing
      */
     protected function docBlockFull()
     {

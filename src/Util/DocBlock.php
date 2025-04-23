@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -88,6 +88,7 @@ class DocBlock
                 $lines[] = $line;
             }
         }
+
         return implode("\n", $lines);
     }
 
@@ -113,6 +114,7 @@ class DocBlock
                 }
             }
         }
+
         return $this;
     }
 
@@ -162,6 +164,7 @@ class DocBlock
         }
         $this->description = implode("\n", $result);
         $this->rawDescription = rtrim(implode("\n", $raw));
+
         return $this;
     }
 
@@ -201,11 +204,12 @@ class DocBlock
                 $tagName = array_shift($tags);
                 $tagData = implode(" ", $tags);
                 $this->tags[] = [
-                    'name'  => $tagName,
-                    'data'  => $tagData,
+                    'name' => $tagName,
+                    'data' => $tagData,
                 ];
             }
         }
+
         return $this;
     }
 
@@ -303,6 +307,7 @@ class DocBlock
                 $tags[] = $tag;
             }
         }
+
         return $tags;
     }
 
@@ -371,6 +376,7 @@ class DocBlock
             $result = $str;
             $str = null;
         }
+
         return $result;
     }
 

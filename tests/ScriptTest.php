@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -26,14 +26,16 @@
 
 namespace NTLAB\Script\Test;
 
+use PHPUnit\Framework\TestCase;
 use NTLAB\Script\Context\ArrayVar;
 use NTLAB\Script\Context\ContextIterator;
-use NTLAB\Script\Core\Manager;
+use NTLAB\Script\Context\PartialObject;
+use NTLAB\Script\Core\Manager as ScriptManager;
 use NTLAB\Script\Core\Module;
 use NTLAB\Script\Core\Script;
 use NTLAB\Script\Listener\ListenerInterface;
 
-class ScriptTest extends BaseTest
+class ScriptTest extends TestCase
 {
     /**
      * @var \NTLAB\Script\Core\Script
@@ -41,16 +43,16 @@ class ScriptTest extends BaseTest
     protected $script;
 
     protected $modules = [
-        'system.array'    => ['each', 'lcreate', 'ladd', 'lconcat'],
-        'system.context'  => ['recno', 'reccnt'],
-        'system.core'     => ['func', 'var', 'null', 'eval', 'const'],
-        'system.counter'  => ['cget', 'cset', 'creset', 'cinc', 'cdec', 'series'],
-        'system.date'     => ['fmtdate', 'dtafter', 'dtbefore', 'dtpart', 'time'],
-        'system.logic'    => ['if', 'cmp', 'eq', 'neq', 'leq', 'geq', 'ls', 'gr', 'and', 'or', 'not', 'isnull'],
-        'system.math'     => ['sum', 'sub', 'mul', 'div', 'mod', 'inc', 'dec', 'int', 'numonly'],
-        'system.stack'    => ['sclr', 'sexist', 'spush', 'spop'],
-        'system.string'   => ['split', 'ucfirst', 'ucwords', 'upper', 'lower', 'trim', 'concat', 'concatw', 'concatall', 'spaceconcat', 'repeat', 'pos', 'strpos', 'len', 'ch', 'space', 'crlf', 'splitdel', 'left', 'right', 'substr', 'p', 'q', 'empty', 'notempty'],
-        'test.core'       => ['callme', 'callres', 'test'],
+        'system.array' => ['each', 'lcreate', 'ladd', 'lconcat'],
+        'system.context' => ['recno', 'reccnt'],
+        'system.core' => ['func', 'var', 'null', 'eval', 'const'],
+        'system.counter' => ['cget', 'cset', 'creset', 'cinc', 'cdec', 'series'],
+        'system.date' => ['fmtdate', 'dtafter', 'dtbefore', 'dtpart', 'time'],
+        'system.logic' => ['if', 'cmp', 'eq', 'neq', 'leq', 'geq', 'ls', 'gr', 'and', 'or', 'not', 'isnull'],
+        'system.math' => ['sum', 'sub', 'mul', 'div', 'mod', 'inc', 'dec', 'int', 'numonly'],
+        'system.stack' => ['sclr', 'sexist', 'spush', 'spop'],
+        'system.string' => ['split', 'ucfirst', 'ucwords', 'upper', 'lower', 'trim', 'concat', 'concatw', 'concatall', 'spaceconcat', 'repeat', 'pos', 'strpos', 'len', 'ch', 'space', 'crlf', 'splitdel', 'left', 'right', 'substr', 'p', 'q', 'empty', 'notempty'],
+        'test.core' => ['callme', 'callres', 'test'],
     ];
 
     protected function setUp(): void
@@ -136,28 +138,47 @@ class ScriptTest extends BaseTest
 First if: it's something
 Second if: it's something too
 EOF
-        , $this->script->evaluate(<<<EOF
+            , $this->script->evaluate(
+                <<<EOF
 First if: #if(#eq(\$var,something),"it's something","it's not something")
 Second if: #if(#eq(\$var,something),"it's something too","no, it's not something")
 EOF
-        ), '->evaluate() proper process multiple if occurance with same condition');
+            ), '->evaluate() proper process multiple if occurance with same condition');
     }
 
     public function testIterator()
     {
-        $counter = 0;
+        $seq = 0;
+        $values = ['A1', 'A2', 'A3'];
+        $objects = array_map(fn ($a) => new TestContext2($a), $values);
         $this->script
-            ->setObjects([
-                new TestContext2('A1'),
-                new TestContext2('A2'),
-                new TestContext2('A3'),
-            ])
-            ->each(function(Script $script, ScriptTest $_this) use (&$counter) {
-                $counter++;
-                $_this->assertEquals($counter, $script->evaluate('#recno()'), sprintf('Record number #%d', $counter));
+            ->setObjects($objects)
+            ->each(function (Script $script, ScriptTest $_this) use ($values, &$seq) {
+                $seq++;
+                $_this->assertEquals($values[$seq - 1], $script->evaluate('$Var'), sprintf('Variable is %s', $values[$seq - 1]));
+                $_this->assertEquals($seq, $script->evaluate('#recno()'), sprintf('Record number #%d', $seq));
             })
         ;
         $this->assertEquals(3, $this->script->evaluate('#reccnt()'), 'Record count should be 3');
+    }
+
+    public function testPartial()
+    {
+        $seq = 5;
+        $idx = 0;
+        $total = 10;
+        $values = ['B1', 'B2', 'B3'];
+        $objects = array_map(fn ($a) => new TestContext2($a), $values);
+        $this->script
+            ->setObjects(new PartialObject($objects, $seq, $total))
+            ->each(function (Script $script, ScriptTest $_this) use ($values, &$seq, &$idx) {
+                $seq++;
+                $_this->assertEquals($values[$idx], $script->evaluate('$Var'), sprintf('Variable is %s', $values[$idx]));
+                $_this->assertEquals($seq, $script->evaluate('#recno()'), sprintf('Record number #%d', $seq));
+                $idx++;
+            })
+        ;
+        $this->assertEquals(10, $this->script->evaluate('#reccnt()'), 'Record count should be 10');
     }
 }
 
@@ -297,4 +318,4 @@ class TestListener implements ListenerInterface
 }
 
 // register test module
-Manager::addListener(TestListener::getInstance());
+ScriptManager::addListener(TestListener::getInstance());

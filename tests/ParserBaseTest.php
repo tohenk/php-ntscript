@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -26,7 +26,9 @@
 
 namespace NTLAB\Script\Test;
 
-abstract class ParserBaseTest extends BaseTest
+use PHPUnit\Framework\TestCase;
+
+abstract class ParserBaseTest extends TestCase
 {
     /**
      * @var \NTLAB\Script\Parser\Parser
@@ -93,29 +95,29 @@ abstract class ParserBaseTest extends BaseTest
         $this->assertEquals(
             [
                 [
-                    'name'    => 'cdups',
-                    'match'   => '#cdups(#spaceconcat(#beauty(#pvar(SomeObject.OtherObject.OtherVar)),#pvar(MyObject.MyVar)))',
-                    'params'  => ['#spaceconcat(#beauty(#pvar(SomeObject.OtherObject.OtherVar)),#pvar(MyObject.MyVar))'],
+                    'name' => 'cdups',
+                    'match' => '#cdups(#spaceconcat(#beauty(#pvar(SomeObject.OtherObject.OtherVar)),#pvar(MyObject.MyVar)))',
+                    'params' => ['#spaceconcat(#beauty(#pvar(SomeObject.OtherObject.OtherVar)),#pvar(MyObject.MyVar))'],
                 ],
                 [
-                    'name'    => 'spaceconcat',
-                    'match'   => '#spaceconcat(#beauty(#pvar(SomeObject.OtherObject.OtherVar)),#pvar(MyObject.MyVar))',
-                    'params'  => ['#beauty(#pvar(SomeObject.OtherObject.OtherVar))', '#pvar(MyObject.MyVar)'],
+                    'name' => 'spaceconcat',
+                    'match' => '#spaceconcat(#beauty(#pvar(SomeObject.OtherObject.OtherVar)),#pvar(MyObject.MyVar))',
+                    'params' => ['#beauty(#pvar(SomeObject.OtherObject.OtherVar))', '#pvar(MyObject.MyVar)'],
                 ],
                 [
-                    'name'    => 'beauty',
-                    'match'   => '#beauty(#pvar(SomeObject.OtherObject.OtherVar))',
-                    'params'  => ['#pvar(SomeObject.OtherObject.OtherVar)'],
+                    'name' => 'beauty',
+                    'match' => '#beauty(#pvar(SomeObject.OtherObject.OtherVar))',
+                    'params' => ['#pvar(SomeObject.OtherObject.OtherVar)'],
                 ],
                 [
-                    'name'    => 'pvar',
-                    'match'   => '#pvar(SomeObject.OtherObject.OtherVar)',
-                    'params'  => ['SomeObject.OtherObject.OtherVar'],
+                    'name' => 'pvar',
+                    'match' => '#pvar(SomeObject.OtherObject.OtherVar)',
+                    'params' => ['SomeObject.OtherObject.OtherVar'],
                 ],
                 [
-                    'name'    => 'pvar',
-                    'match'   => '#pvar(MyObject.MyVar)',
-                    'params'  => ['MyObject.MyVar'],
+                    'name' => 'pvar',
+                    'match' => '#pvar(MyObject.MyVar)',
+                    'params' => ['MyObject.MyVar'],
                 ],
             ],
             $this->parser->getFunctions(),

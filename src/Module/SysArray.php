@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -61,7 +61,7 @@ class SysArray extends Module
             $script = new Script();
             $script
                 ->setObjects($objects)
-                ->each(function(Script $script, SysArray $_this) use ($expr) {
+                ->each(function (Script $script, SysArray $_this) use ($expr) {
                     $script->evaluate($expr);
                 }, false)
             ;
@@ -122,6 +122,7 @@ class SysArray extends Module
         if (isset(self::$list[$name])) {
             return count(self::$list[$name]);
         }
+
         return 0;
     }
 }

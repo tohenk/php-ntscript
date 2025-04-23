@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -49,7 +49,7 @@ class SysMath extends Module
     {
         $value = null;
         $args = func_get_args();
-        for ($i = 0; $i < count($args); $i ++) {
+        for ($i = 0; $i < count($args); $i++) {
             if (is_numeric($args[$i])) {
                 if ($i == 0) {
                     $value = $args[$i];
@@ -58,6 +58,7 @@ class SysMath extends Module
                 }
             }
         }
+
         return $value;
     }
 
@@ -74,7 +75,7 @@ class SysMath extends Module
     {
         $value = null;
         $args = func_get_args();
-        for ($i = 0; $i < count($args); $i ++) {
+        for ($i = 0; $i < count($args); $i++) {
             if (is_numeric($args[$i])) {
                 if ($i == 0) {
                     $value = $args[$i];
@@ -83,6 +84,7 @@ class SysMath extends Module
                 }
             }
         }
+
         return $value;
     }
 
@@ -99,7 +101,7 @@ class SysMath extends Module
     {
         $value = null;
         $args = func_get_args();
-        for ($i = 0; $i < count($args); $i ++) {
+        for ($i = 0; $i < count($args); $i++) {
             if (is_numeric($args[$i])) {
                 if ($i == 0) {
                     $value = $args[$i];
@@ -108,6 +110,7 @@ class SysMath extends Module
                 }
             }
         }
+
         return $value;
     }
 
@@ -124,7 +127,7 @@ class SysMath extends Module
     {
         $value = null;
         $args = func_get_args();
-        for ($i = 0; $i < count($args); $i ++) {
+        for ($i = 0; $i < count($args); $i++) {
             if (is_numeric($args[$i])) {
                 if ($i == 0) {
                     $value = $args[$i];
@@ -133,6 +136,7 @@ class SysMath extends Module
                 }
             }
         }
+
         return $value;
     }
 

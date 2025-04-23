@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,39 +24,66 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\Script\Test;
+namespace NTLAB\Script\Context;
 
-use PHPUnit\Framework\TestCase;
-
-abstract class BaseTest extends TestCase
+class PartialObject
 {
-    protected function getFixtureDir()
+    /**
+     * @var array
+     */
+    protected $objects;
+
+    /**
+     * @var int
+     */
+    protected $position;
+
+    /**
+     * @var int
+     */
+    protected $count;
+
+    /**
+     * Constructor.
+     *
+     * @param array $objects
+     * @param int $position
+     * @param int $count
+     */
+    public function __construct($objects, $position, $count)
     {
-        return __DIR__.'/fixtures/';
+        $this->objects = $objects;
+        $this->position = $position;
+        $this->count = $count;
     }
 
-    protected function getResultDir()
+    /**
+     * Get objects.
+     *
+     * @return mixed
+     */
+    public function getObjects()
     {
-        return __DIR__.'/result/';
+        return $this->objects;
     }
 
-    protected function getOutDir()
+    /**
+     * Get position.
+     *
+     * @return int
+     */
+    public function getPosition()
     {
-        return __DIR__.'/out/';
+        return $this->position;
     }
 
-    protected function loadFixture($name)
+    /**
+     * Get count.
+     *
+     * @return int
+     */
+    public function getCount()
     {
-        return file_get_contents($this->getFixtureDir().$name);
-    }
-
-    protected function loadResult($name)
-    {
-        return file_get_contents($this->getResultDir().$name);
-    }
-
-    protected function saveOut($content, $filename)
-    {
-        file_put_contents($this->getOutDir().$filename, $content);
+        return $this->count;
     }
 }

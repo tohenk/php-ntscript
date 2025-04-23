@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -110,6 +110,7 @@ class Script
     public function setObjects($objects)
     {
         $this->iterator->setObjects($objects);
+
         return $this;
     }
 
@@ -128,10 +129,9 @@ class Script
             array_shift($debugs);
             // this is the current function caller debug backtrace
             $caller = array_shift($debugs);
-            $i = 0;
+            $i = $this->iterator->getStart();
             foreach ($this->iterator->getObjects() as $context) {
-                $i++;
-                $this->iterator->setRecNo($i);
+                $this->iterator->setRecNo(++$i);
                 $this->setContext($context);
                 if ($notify) {
                     $this->getManager()->notifyContextChange($context, $this->iterator);
@@ -139,6 +139,7 @@ class Script
                 call_user_func($callback, $this, isset($caller['object']) ? $caller['object'] : $this);
             }
         }
+
         return $this;
     }
 
@@ -154,6 +155,7 @@ class Script
             throw new \RuntimeException('No script context available.');
         }
         array_push($this->stacks, new Stack($this));
+
         return $this;
     }
 
@@ -171,6 +173,7 @@ class Script
         $stack = array_pop($this->stacks);
         $stack->restore();
         unset($stack);
+
         return $this;
     }
 
@@ -193,6 +196,7 @@ class Script
     public function setContext($context)
     {
         $this->context = $context;
+
         return $this;
     }
 
@@ -208,8 +212,10 @@ class Script
     {
         if ($this->manager->has($func)) {
             $result = $this->manager->call($this, $func, $parameters);
+
             return true;
         }
+
         return false;
     }
 
@@ -302,6 +308,7 @@ class Script
                 }
             }
         }
+
         return [$success, $value];
     }
 
@@ -320,9 +327,11 @@ class Script
             list($success, $value) = $this->tryGetVar($context, $name);
             if ($success) {
                 $var = $value;
+
                 return true;
             }
         }
+
         return false;
     }
 
@@ -355,6 +364,7 @@ class Script
                 $result = str_replace(static::VARIABLE_IDENTIFIER.$var, $value, $result);
             }
         }
+
         return $retval;
     }
 
@@ -370,9 +380,9 @@ class Script
     {
         if ($script == $from) {
             $script = $to;
-        } else if ($all) {
+        } elseif ($all) {
             $script = str_replace($from, $to, $script);
-        } else if (false !== ($p = strpos($script, $from))) {
+        } elseif (false !== ($p = strpos($script, $from))) {
             $script = substr($script, 0, $p).$to.substr($script, $p + strlen($from), strlen($script) - $p);
         }
     }
@@ -395,6 +405,7 @@ class Script
             }
             $content .= $result;
         }
+
         return $this;
     }
 
@@ -460,6 +471,7 @@ class Script
                 $this->preserveContent($content, $token->getContent());
                 break;
         }
+
         return $content;
     }
 
@@ -499,6 +511,7 @@ class Script
     {
         $parameters = func_get_args();
         $func = array_shift($parameters);
+
         return static::FUNCTION_IDENTIFIER.$func.static::FUNCTION_PARAM_START.implode(static::PARAM_SEPARATOR, $parameters).static::FUNCTION_PARAM_END;
     }
 }

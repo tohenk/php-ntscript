@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -69,6 +69,7 @@ class SysCounter extends Module
     public function f_CSet($id, $value)
     {
         $this->counters[$id] = $value;
+
         return $value;
     }
 
@@ -94,6 +95,7 @@ class SysCounter extends Module
     {
         if (isset($this->counters[$id])) {
             $value = $this->counters[$id];
+
             return $this->f_CSet($id, ++$value);
         }
     }
@@ -109,6 +111,7 @@ class SysCounter extends Module
     {
         if (isset($this->counters[$id])) {
             $value = $this->counters[$id];
+
             return $this->f_CSet($id, --$value);
         }
     }
@@ -139,6 +142,7 @@ class SysCounter extends Module
             $value = floor($value / $div);
             $result = $series[$res - 1].$result;
         }
+
         return $result;
     }
 }

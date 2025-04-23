@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -134,6 +134,7 @@ class Tokenizer
                 }
             }
             $this->log(sprintf("Tokenize processed '%s'", $this->stream->pick($p, $this->stream->getPos() - $p)));
+
             return $result;
         }
     }
@@ -215,6 +216,7 @@ class Tokenizer
                     break;
             }
         }
+
         return $token;
     }
 
@@ -310,6 +312,7 @@ class Tokenizer
                 }
                 break;
         }
+
         return $next;
     }
 
@@ -325,14 +328,17 @@ class Tokenizer
             if (null !== $this->quote) {
                 if ($this->stream->is($this->quote)) {
                     $this->log(sprintf("Got quote '%s' at %d", $this->quote, $this->stream->getPos()));
+
                     return true;
                 }
-            } else if ($this->stream->is([Script::FUNCTION_PARAM_END, Script::PARAM_SEPARATOR])) {
+            } elseif ($this->stream->is([Script::FUNCTION_PARAM_END, Script::PARAM_SEPARATOR])) {
                 $this->log(sprintf("Got parameter end '%s' at %d", $this->stream->getChar(), $this->stream->getPos()));
                 $this->stream->prev();
+
                 return true;
             }
         }
+
         return false;
     }
 
@@ -384,6 +390,7 @@ class Tokenizer
             }
         }
         $this->log(sprintf("Read parameter end for '%s'", $this->data));
+
         return $valid;
     }
 
@@ -403,6 +410,7 @@ class Tokenizer
             return false;
         }
         $this->data .= $this->stream->getChar();
+
         return true;
     }
 

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -74,6 +74,7 @@ class Stream
         if ($content instanceof self) {
             return $content;
         }
+
         return new self($content);
     }
 
@@ -104,8 +105,10 @@ class Stream
             if ($advance) {
                 $this->pos++;
             }
+
             return true;
         }
+
         return false;
     }
 
@@ -124,6 +127,7 @@ class Stream
             }
             $this->pos--;
         }
+
         return false;
     }
 
@@ -155,6 +159,7 @@ class Stream
     public function next()
     {
         $this->pos++;
+
         return $this->pos;
     }
 
@@ -166,6 +171,7 @@ class Stream
     public function prev()
     {
         $this->pos--;
+
         return $this->pos;
     }
 
@@ -182,19 +188,20 @@ class Stream
     /**
      * Check if current character is equal with.
      *
-     * @param string $chars            
+     * @param string $chars
      * @return boolean
      */
     public function is($chars)
     {
         $chars = is_array($chars) ? $chars : [$chars];
+
         return in_array($this->ch, $chars);
     }
 
     /**
      * Check if required chars is present.
      *
-     * @param string $chars            
+     * @param string $chars
      * @return boolean
      */
     public function has($chars)
@@ -216,6 +223,7 @@ class Stream
                 break;
             }
         }
+
         return $result;
     }
 

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -88,6 +88,7 @@ class Token implements \ArrayAccess, \Iterator, \Countable
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -110,6 +111,7 @@ class Token implements \ArrayAccess, \Iterator, \Countable
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -132,6 +134,7 @@ class Token implements \ArrayAccess, \Iterator, \Countable
     public function setContent($content)
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -145,6 +148,7 @@ class Token implements \ArrayAccess, \Iterator, \Countable
     {
         $this->children[] = $child;
         $this->rewind();
+
         return $this;
     }
 
@@ -169,6 +173,7 @@ class Token implements \ArrayAccess, \Iterator, \Countable
         foreach ($this->children as $child) {
             $result .= $child->getContent();
         }
+
         return $result;
     }
 
@@ -183,6 +188,7 @@ class Token implements \ArrayAccess, \Iterator, \Countable
         foreach ($this->children as $child) {
             $result[] = $child->getChildrenContent();
         }
+
         return $result;
     }
 

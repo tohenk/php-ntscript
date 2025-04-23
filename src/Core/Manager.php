@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -109,6 +109,7 @@ class Manager
                 ->notifyModuleRegister()
             ;
         }
+
         return self::$instance;
     }
 
@@ -202,6 +203,7 @@ class Manager
                 $this->addModule($module);
             }
         }
+
         return $this;
     }
 
@@ -215,6 +217,7 @@ class Manager
         foreach (self::$listeners as $listener) {
             $listener->notifyModuleRegister($this);
         }
+
         return $this;
     }
 
@@ -230,6 +233,7 @@ class Manager
         foreach (self::$listeners as $listener) {
             $listener->notifyContextChange($context, $iterator);
         }
+
         return $this;
     }
 
@@ -243,6 +247,7 @@ class Manager
         if (null === self::$parser) {
             $this->registerParser(new LexerParser());
         }
+
         return self::$parser;
     }
 
@@ -258,6 +263,7 @@ class Manager
             $this->modules[$id] = $module;
             $module->setManager($this)->register();
         }
+
         return $this;
     }
 
@@ -289,6 +295,7 @@ class Manager
                 $this->registerLogic($name);
             }
         }
+
         return $this;
     }
 
@@ -304,6 +311,7 @@ class Manager
         if (!isset($this->functions[$name])) {
             $this->functions[$name] = $func;
         }
+
         return $this;
     }
 
@@ -318,6 +326,7 @@ class Manager
         if (!in_array($name, $this->logics)) {
             $this->logics[] = $name;
         }
+
         return $this;
     }
 
@@ -336,6 +345,7 @@ class Manager
                 $this->registerLogic($alias);
             }
         }
+
         return $this;
     }
 
@@ -389,6 +399,7 @@ class Manager
                 $method = $func->getMethod();
                 if (is_callable($method)) {
                     $func->getModule()->setScript($caller);
+
                     return call_user_func_array($method, $parameters);
                 }
             }
@@ -467,6 +478,7 @@ class Manager
             $result[] = '';
         }
         $result[] = 'Total functions: '.$count;
+
         return $result;
     }
 }

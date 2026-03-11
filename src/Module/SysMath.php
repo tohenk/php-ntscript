@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2026 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -152,6 +152,48 @@ class SysMath extends Module
     {
         if (is_numeric($value1) && is_numeric($value2)) {
             return $value1 % $value2;
+        }
+    }
+
+    /**
+     * Round `value`.
+     *
+     * @param float $value  Value
+     * @return float
+     * @func round
+     */
+    public function f_Round($value)
+    {
+        if (is_numeric($value)) {
+            return round($value);
+        }
+    }
+
+    /**
+     * Round down `value`.
+     *
+     * @param float $value  Value
+     * @return float
+     * @func floor
+     */
+    public function f_Floor($value)
+    {
+        if (is_numeric($value)) {
+            return floor($value);
+        }
+    }
+
+    /**
+     * Round up `value`.
+     *
+     * @param float $value  Value
+     * @return float
+     * @func ceil
+     */
+    public function f_Ceil($value)
+    {
+        if (is_numeric($value)) {
+            return ceil($value);
         }
     }
 
